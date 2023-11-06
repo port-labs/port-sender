@@ -16,6 +16,6 @@ jobs:
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-                blueprint: ${{ secrets.BLUEPRINT_IDENTIFIER }}
+                blueprint: ${{ secrets.BLUEPRINT }}
                 scorecard: ${{ secrets.SCORECARD }}
                 team: ${{ secrets.TEAM }}
