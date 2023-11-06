@@ -1,0 +1,25 @@
+name: Port Message Sender
+description: Send Reminders and Reports from Port to Slack
+author: port-labs
+inputs:
+  port_client_id:
+    description: "TThe Port Client ID to use to authenticate with the API"
+    required: true
+  port_client_secret:
+    description: "The Port Client Secret to use to authenticate with the API"
+    required: true
+  slack_webhook_url:
+    description: "The URL of the Slack channel webhook to use to send messages"
+    required: true
+  blueprint_identifier:
+    description: "The identifier of the blueprint in Port which you want to send reminders and reports about"
+    required: true
+  scorecard:
+    description: "The scorecard to use to send reminders and reports about"
+    required: true
+  team:
+    description: "The team to use to filter by in Port, to get only the team resources you want to send reminders and reports about"
+    required: true
+runs:
+  using: docker
+  image: Dockerfile
