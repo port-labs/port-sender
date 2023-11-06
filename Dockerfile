@@ -3,7 +3,7 @@ ADD . /app
 WORKDIR /app
 
 # We are installing a dependency here directly into our app source dir
-RUN pip install -r /app/requirements.txt
+RUN pip install -r requirements.txt
 
 ENV PYTHONPATH /app
-CMD ["/app/main.py"]
+CMD ["python main.py"]
