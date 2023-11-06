@@ -1,0 +1,22 @@
+name: Generate Scorecards Reminders
+
+
+## run every day at 9am
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+
+jobs:
+    generate_scorecards_reminders:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Generate Scorecards Reminders
+              uses: port-labs/port-action@v0.1.1
+              with:
+                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+                port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+                slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+                blueprint_identifier: ${{ secrets.BLUEPRINT_IDENTIFIER }}
+                scorecard: ${{ secrets.SCORECARD }}
+                team: ${{ secrets.TEAM }}
