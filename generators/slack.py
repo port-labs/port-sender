@@ -12,7 +12,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                                       entities: list) -> List[Dict[str, Any]]:
         blueprint_plural = utils.convert_to_plural(blueprint)
         entities_didnt_pass_gold_level = {
-            "Base": [],
+            "Basic": [],
             "Bronze": [],
             "Silver": [],
         }
