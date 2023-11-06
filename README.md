@@ -15,12 +15,12 @@ Port is the Developer Platform meant to supercharge your DevOps and Developers, 
 See [action.yml](action.yml) for inputs and outputs.
 
 ```yaml
-- uses: port-labs/port-sender@v0.1.1
+- uses: port-labs/port-sender@v0.1.19
   with:
     port_client_id: ${{ secrets.PORT_CLIENT_ID }}
     port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-    blueprint: PortIntegration
+    blueprint: service
     scorecard: Ownership
     team: BACKEND-TEAM
 ```
