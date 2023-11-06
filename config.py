@@ -22,5 +22,8 @@ class Settings(BaseSettings):
     message_kind: MessageKind = MessageKind.generate_scorecards_reminders
     target_kind: TargetKind = TargetKind.slack
 
+    class Config:
+        env_prefix = "INPUT_"
+
 
 settings = Settings()
