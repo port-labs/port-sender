@@ -14,7 +14,7 @@ inputs:
   slack_webhook_url:
     description: "The URL of the Slack channel webhook to use to send messages"
     required: true
-  blueprint_identifier:
+  blueprint:
     description: "The identifier of the blueprint in Port which you want to send reminders and reports about"
     required: true
   scorecard:
