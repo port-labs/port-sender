@@ -2,6 +2,9 @@ name: Generate Scorecards Reminders
 
 
 ## run every day at 9am
+#on:
+#  schedule:
+#    - cron: '0 9 * * *'
 
 on:
   workflow_dispatch:
