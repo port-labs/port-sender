@@ -17,7 +17,6 @@ class PortClient:
         }
 
     def get_token(self, client_id, client_secret):
-        print(f"Getting token for {client_id}", client_secret)
         credentials = {"clientId": client_id, "clientSecret": client_secret}
         token_response = requests.post(
             f"{self.api_url}/v1/auth/access_token", json=credentials
