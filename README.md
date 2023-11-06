@@ -17,8 +17,8 @@ See [action.yml](action.yml) for inputs and outputs.
 ```yaml
 - uses: port-labs/port-sender@v0.1.0
   with:
-    client_id: ${{ secrets.CLIENT_ID }}
-    client_secret: ${{ secrets.CLIENT_SECRET }}
+    port_client_id: ${{ secrets.CLIENT_ID }}
+    port_client_secret: ${{ secrets.CLIENT_SECRET }}
     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     blueprint: PortIntegration
     scorecard: Ownership
