@@ -5,4 +5,4 @@ WORKDIR /app
 # We are installing a dependency here directly into our app source dir
 RUN pip install -r requirements.txt
 
-CMD ["python", "main.py"]
+CMD ["python", "/app/main.py"]

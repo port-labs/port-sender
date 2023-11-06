@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-    generate_scorecards_reminders:
+    generate-scorecards-reminders:
         runs-on: ubuntu-latest
         steps:
             - name: Generate Scorecards Reminders
