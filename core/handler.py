@@ -15,7 +15,7 @@ class Handler:
     def generate_scorecards_reminders(cls):
         logger.info("Initializing Port client")
         port_client = PortClient(settings.port_api_url, settings.port_client_id, settings.port_client_secret)
-        logger.info("Fetching entities")
+        logger.info(f"Fetching entities for team {settings.team}, blueprint {settings.blueprint}, scorecard {settings.scorecard}")
         entities = port_client.search_entities(
             {
                 "combinator": "and",
@@ -33,6 +33,9 @@ class Handler:
                 ]
             }
         )
+        if not entities:
+            logger.info("No entities found")
+            return
         if settings.target_kind == "slack":
             logger.info(f"Generating scorecards reminders for {len(entities)} entities")
             blocks = SlackMessageGenerator().generate_scorecards_reminders(settings.blueprint,
