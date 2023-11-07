@@ -52,7 +52,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"*⚠️ {blueprint_plural} with unmet rules ({number_of_entities_didnt_pass_gold_level})*"
+                        "text": f"*⚠️ {number_of_entities_didnt_pass_gold_level} {blueprint_plural} with unmet rules*"
                     }
                 },
                 {
