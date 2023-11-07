@@ -28,12 +28,16 @@ class PortClient:
             f"{self.api_url}/v1/entities/search",
             json=query,
             headers=self.headers,
-            params={
-                # "exclude_calculated_properties": "true",
-                # "include": ["blueprint", "identifier"],
-            },
+            params={},
         )
         search_req.raise_for_status()
         return search_req.json()["entities"]
 
+    def get_scorecard(self, blueprint_id: str, scorecard_id: str):
+        scorecard_req = requests.get(
+            f"{self.api_url}/v1/blueprints/{blueprint_id}/scorecards/{scorecard_id}",
+            headers=self.headers,
+        )
+        scorecard_req.raise_for_status()
+        return scorecard_req.json()
 

@@ -8,7 +8,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
 
     def generate_scorecards_reminders(self,
                                       blueprint: str,
-                                      scorecard_name: str,
+                                      scorecard: Dict[str, Any],
                                       entities: list) -> List[Dict[str, Any]]:
         blueprint_plural = utils.convert_to_plural(blueprint)
         entities_didnt_pass_gold_level = {
@@ -18,11 +18,11 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         }
         number_of_entities_didnt_pass_gold_level = 0
         for entity in entities:
-            scorecard = entity.get("scorecards", {}).get(scorecard_name, {})
-            number_of_rules = len(scorecard.get("rules", []))
-            if scorecard.get("level") != "Gold":
-                passed_rules = [rule for rule in scorecard.get("rules", []) if rule.get("status") == "SUCCESS"] or []
-                entities_didnt_pass_gold_level[scorecard.get("level")].append(
+            entity_scorecard_result = entity.get("scorecards", {}).get(scorecard.get("identifier"), {})
+            number_of_rules = len(entity_scorecard_result.get("rules", []))
+            if entity_scorecard_result.get("level") != "Gold":
+                passed_rules = [rule for rule in entity_scorecard_result.get("rules", []) if rule.get("status") == "SUCCESS"] or []
+                entities_didnt_pass_gold_level[entity_scorecard_result.get("level")].append(
                     {
                         "identifier": entity.get("identifier"),
                         "name": entity.get("title"),
@@ -37,7 +37,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": f":bulb: {scorecard_name} reminder",
+                        "text": f":bell: {scorecard.get('title')} reminder",
                     }
                 },
                 {

@@ -21,4 +21,4 @@ jobs:
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
                 blueprint: ${{ secrets.BLUEPRINT }}
                 scorecard: ${{ secrets.SCORECARD }}
-                team: ${{ secrets.TEAM }}
+                filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend"]}'

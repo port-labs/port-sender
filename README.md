@@ -22,5 +22,5 @@ See [action.yml](action.yml) for inputs and outputs.
     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     blueprint: service
     scorecard: Ownership
-    team: BACKEND-TEAM
+    filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend"]}'
 ```

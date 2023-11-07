@@ -15,31 +15,31 @@ class Handler:
     def generate_scorecards_reminders(cls):
         logger.info("Initializing Port client")
         port_client = PortClient(settings.port_api_url, settings.port_client_id, settings.port_client_secret)
-        logger.info(f"Fetching entities for team {settings.team}, blueprint {settings.blueprint}, scorecard {settings.scorecard}")
-        entities = port_client.search_entities(
-            {
+        logger.info(f"Fetching entities for query: {settings.filter_rule}, blueprint {settings.blueprint}, scorecard {settings.scorecard}")
+        search_query = {
                 "combinator": "and",
                 "rules": [
                     {
                         "property": "$blueprint",
                         "operator": "=",
                         "value": settings.blueprint
-                    },
-                    {
-                        "property": "$team",
-                        "operator": "containsAny",
-                        "value": [settings.team]
                     }
-                ]
-            }
+                ],
+        }
+        if settings.filter_rule:
+            search_query["rules"].append(settings.filter_rule.dict())
+
+        entities = port_client.search_entities(
+            search_query
         )
+        scorecard = port_client.get_scorecard(settings.blueprint, settings.scorecard).get("scorecard")
         if not entities:
             logger.info("No entities found")
             return
         if settings.target_kind == "slack":
             logger.info(f"Generating scorecards reminders for {len(entities)} entities")
             blocks = SlackMessageGenerator().generate_scorecards_reminders(settings.blueprint,
-                                                                           settings.scorecard,
+                                                                           scorecard,
                                                                            entities)
             logger.info("Sending scorecards reminders to slack channel")
             Slack().send_message(blocks)

@@ -6,23 +6,23 @@ branding:
   color: gray-dark
 inputs:
   port_client_id:
-    description: "TThe Port Client ID to use to authenticate with the API"
+    description: 'The Port Client ID to use to authenticate with the API'
     required: true
   port_client_secret:
-    description: "The Port Client Secret to use to authenticate with the API"
+    description: 'The Port Client Secret to use to authenticate with the API'
     required: true
   slack_webhook_url:
-    description: "The URL of the Slack channel webhook to use to send messages"
+    description: 'The URL of the Slack channel webhook to use to send messages'
     required: true
   blueprint:
-    description: "The identifier of the blueprint in Port which you want to send reminders and reports about"
+    description: 'The identifier of the blueprint in Port which you want to send reminders and reports about'
     required: true
   scorecard:
-    description: "The scorecard to use to send reminders and reports about"
+    description: 'The scorecard to use to send reminders and reports about'
     required: true
-  team:
-    description: "The team to use to filter by in Port, to get only the team resources you want to send reminders and reports about"
-    required: true
+  filter_rule:
+    description: 'filter to use to filter the response, for example: {"property": "$team","operator": "containsAny","value": ["Backend"]}'
+    required: false
 runs:
   using: docker
   image: Dockerfile
