@@ -48,7 +48,7 @@ Action to send a scorecard report to a Slack channel about the current state and
 | `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 ```yaml
-- uses: port-labs/port-sender@v0.1.13
+- uses: port-labs/port-sender@v0.1.14
   with:
     port_client_id: ${{ secrets.PORT_CLIENT_ID }}
     port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
@@ -82,7 +82,7 @@ A call to action to remind the team that some of their services didn't reach Gol
 In this example you can see how we filter for specific team and send a reminder to them.
 
 ```yaml
-- uses: port-labs/port-sender@v0.1.13
+- uses: port-labs/port-sender@v0.1.14
   with:
     port_client_id: ${{ secrets.PORT_CLIENT_ID }}
     port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
@@ -113,7 +113,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Generate Scorecard Report
-              uses: port-labs/port-sender@v0.1.13
+              uses: port-labs/port-sender@v0.1.14
               with:
                 message_kind: scorecard_report
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
