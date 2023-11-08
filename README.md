@@ -11,7 +11,7 @@ Port is the Developer Platform meant to supercharge your DevOps and Developers, 
 
 Action to send a scorecard report to a Slack channel about the current state and progress in a scorecard.
 
-### example
+### Output example
 
  ![Scorecard Report](docs/assets/scorecard-report.png)
 
@@ -43,7 +43,7 @@ Action to send a scorecard report to a Slack channel about the current state and
 
 A call to action to remind the team that some of their services didn't reach Gold level for specific scorecard.
 
-### example
+### Output example
 
  ![Scorecard Reminder](docs/assets/scorecard-reminder.png)
 
