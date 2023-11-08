@@ -150,11 +150,11 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                                       blueprint: str,
                                       scorecard: Dict[str, Any],
                                       entities: list) -> List[Dict[str, Any]]:
-        blueprint_plural = utils.convert_to_plural(blueprint)
+        blueprint_plural = utils.convert_to_plural(blueprint).title()
         entities_didnt_pass_gold_level = {
-            "Basic": [],
-            "Bronze": [],
             "Silver": [],
+            "Bronze": [],
+            "Basic": [],
         }
         number_of_entities_didnt_pass_gold_level = 0
         for entity in entities:
@@ -171,6 +171,11 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     }
                 )
                 number_of_entities_didnt_pass_gold_level += 1
+
+        entities_didnt_pass_gold_level_sorted = {
+            level: sorted(entities, key=lambda item: len(item.get("passed_rules", [])), reverse=True)
+            for level, entities in entities_didnt_pass_gold_level.items()
+        }
 
         blocks = [
                 {
@@ -200,7 +205,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "text": {
                         "type": "mrkdwn",
                         "text": self._generate_entities_list_with_level_and_link(blueprint,
-                                                                                 entities_didnt_pass_gold_level)
+                                                                                 entities_didnt_pass_gold_level_sorted)
                     }
                 }
             ]
@@ -272,8 +277,9 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         for level, entities in entities_by_level.items():
             if not entities:
                 continue
-            text += f"*{level}*\n\n"
+
+            text += f"\n*{level}*\n\n"
             for entity in entities:
                 text += f"• <{base_entity_url}{entity.get('identifier')}|{entity.get('name')}>" \
-                        f" [{len(entity.get('passed_rules'))}/{entity.get('number_of_rules')}] Passed \n"
+                        f" - `[{len(entity.get('passed_rules'))}/{entity.get('number_of_rules')}] Passed` \n"
         return text

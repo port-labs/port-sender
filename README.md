@@ -6,16 +6,59 @@
 
 Port is the Developer Platform meant to supercharge your DevOps and Developers, and allow you to regain control of your environment.
 
-### Docs
 
-- [Port Docs](https://docs.getport.io/build-your-software-catalog/sync-data-to-catalog/ci-cd/github-workflow/)
+## Send Scorecard Report
 
-## Usage
+Action to send a scorecard report to a Slack channel about the current metrics of a scorecard.
 
-See [action.yml](action.yml) for inputs and outputs.
+### example
 
+ ![Scorecard Report](docs/assets/scorecard-report.png)
 
- ![Generate Scorecard Report](docs/assets/generate-scorecard-report.png)
+### Usage
+
+| Input | Description                                                                                               | Required | Default |
+| ----- |-----------------------------------------------------------------------------------------------------------|----------| ------- |
+| `port_client_id` | Port Client ID                                                                                            | true     | |
+| `port_client_secret` | Port Client Secret                                                                                        | true     | |
+| `slack_webhook_url` | Slack Webhook URL                                                                                         | true     | |
+| `blueprint` | Blueprint identifier                                                                                      | true     | |
+| `scorecard` | Scorecard identifier                                                                                      | true     | |
+| `message_kind` | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                 | true     | |
+| `filter_rule` | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    | |
+
+```yaml
+- uses: port-labs/port-sender@v0.1.19
+  with:
+    port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+    port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+    slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    blueprint: app
+    scorecard: productionReadiness
+    message_kind: scorecard_report
+```
+
+## Send Scorecard Reminder
+
+A call to action to remind the team that some of their services didn't reach Gold level for specific scorecard.
+
+### example
+
+ ![Scorecard Reminder](docs/assets/scorecard-reminder.png)
+
+### Usage
+
+| Input | Description                                                                   | Required | Default |
+| ----- |-------------------------------------------------------------------------------|----------| ------- |
+| `port_client_id` | Port Client ID                                                                | true     | |
+| `port_client_secret` | Port Client Secret                                                            | true     | |
+| `slack_webhook_url` | Slack Webhook URL                                                             | true     | |
+| `blueprint` | Blueprint identifier                                                          | true     | |
+| `scorecard` | Scorecard identifier                                                          | true     | |
+| `message_kind` | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder` | true     | |
+| `filter_rule` | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    | |
+
+In this example you can see how we filter for specific team and send a reminder to them.
 
 ```yaml
 - uses: port-labs/port-sender@v0.1.19
@@ -25,6 +68,6 @@ See [action.yml](action.yml) for inputs and outputs.
     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     blueprint: service
     scorecard: Ownership
-    message_kind: scorecard_report
+    message_kind: scorecard_reminder
     filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend"]}'
 ```
