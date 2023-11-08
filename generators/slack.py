@@ -143,7 +143,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Visit the <{get_port_url(settings.port_region, 'app')}|Port> for more information."
+                    "text": f"Visit <{get_port_url(settings.port_region, 'app')}|Port> for more information."
                 }
             }
         ]
