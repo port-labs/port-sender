@@ -15,7 +15,7 @@ Using this action you will allow you to send reports and reminders automatically
 ### Port
 
 Find your Port credentials
-To find your Port API credentials go to Port, hover on the 3 dots button at the top right corner, select Credentials and then you will be able to view and copy your CLIENT_ID and CLIENT_SECRET:
+To find your Port API credentials go to Port, hover on the 3 dots button at the top right corner, select Credentials and then you will be able to view and copy your `CLIENT_ID` and `CLIENT_SECRET`:
 
 ![Port Credentials](docs/assets/credentials-modal.png)
 
