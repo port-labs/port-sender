@@ -18,15 +18,15 @@ Action to send a scorecard report to a Slack channel about the current metrics o
 ### Usage
 
 | Input                | Description                                                                                              | Required | Default |
-|----------------------|----------------------------------------------------------------------------------------------------------|----------| ------- |
-| `port_client_id`     | Port Client ID                                                                                           | true     | |
-| `port_client_secret` | Port Client Secret                                                                                       | true     | |
-| `port_region`        | Port Region to use, if not provided will use the default region of the Port                        | false    | |
-| `slack_webhook_url`  | Slack Webhook URL                                                                                        | true     | |
-| `blueprint`          | Blueprint identifier                                                                                     | true     | |
-| `scorecard`          | Scorecard identifier                                                                                     | true     | |
-| `message_kind`       | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                | true     | |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    | |
+|----------------------|----------------------------------------------------------------------------------------------------------|----------|---------|
+| `port_client_id`     | Port Client ID                                                                                           | true     |         |
+| `port_client_secret` | Port Client Secret                                                                                       | true     |         |
+| `port_region`        | Port Region to use, if not provided will use the default region of the Port                        | false    | eu        |
+| `slack_webhook_url`  | Slack Webhook URL                                                                                        | true     |         |
+| `blueprint`          | Blueprint identifier                                                                                     | true     |         |
+| `scorecard`          | Scorecard identifier                                                                                     | true     |         |
+| `message_kind`       | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                | true     |         |
+| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 ```yaml
 - uses: port-labs/port-sender@v0.1.19
@@ -50,15 +50,15 @@ A call to action to remind the team that some of their services didn't reach Gol
 ### Usage
 
 | Input                | Description                                                                   | Required | Default |
-|----------------------|-------------------------------------------------------------------------------|----------| ------- |
-| `port_client_id`     | Port Client ID                                                                | true     | |
-| `port_client_secret` | Port Client Secret                                                            | true     | |
-| `port_region`        | Port Region to use, if not provided will use the default region of the Port | false    | |
-| `slack_webhook_url`  | Slack Webhook URL                                                             | true     | |
-| `blueprint`          | Blueprint identifier                                                          | true     | |
-| `scorecard`          | Scorecard identifier                                                          | true     | |
-| `message_kind`       | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder` | true     | |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    | |
+|----------------------|-------------------------------------------------------------------------------|----------|---------|
+| `port_client_id`     | Port Client ID                                                                | true     |         |
+| `port_client_secret` | Port Client Secret                                                            | true     |         |
+| `port_region`        | Port Region to use, if not provided will use the default region of the Port | false    | eu        |
+| `slack_webhook_url`  | Slack Webhook URL                                                             | true     |         |
+| `blueprint`          | Blueprint identifier                                                          | true     |         |
+| `scorecard`          | Scorecard identifier                                                          | true     |         |
+| `message_kind`       | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder` | true     |         |
+| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 In this example you can see how we filter for specific team and send a reminder to them.
 
