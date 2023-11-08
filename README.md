@@ -6,6 +6,21 @@
 
 Port is the Developer Platform meant to supercharge your DevOps and Developers, and allow you to regain control of your environment.
 
+## Pre-requisites
+
+### Port
+
+Find your Port credentials
+To find your Port API credentials go to Port, hover on the 3 dots button at the top right corner, select Credentials and then you will be able to view and copy your CLIENT_ID and CLIENT_SECRET:
+
+![Port Credentials](docs/assets/credentials-modal.png)
+
+### Slack
+
+Setting up a slack webhook
+Head to your slack apps page and create a new app (or select one of your existing apps). Then, go to the Incoming Webhooks page and create a new webhook, specifying the target channel on your server where messages that are sent to the slack webhook will be transferred.
+
+Copy the webhook URL, you will use it soon to set up your
 
 ## Send Scorecard Report
 
@@ -74,4 +89,34 @@ In this example you can see how we filter for specific team and send a reminder 
     filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
 ```
 
+## Schedule Scorecard Reminders and Reports
 
+Adding a schedule to the scorecard reminders and reports, will allow you to send them automatically on a daily basis.
+
+### Example
+
+```yaml title="scheduled-scorecard-report.yml"
+name: Scheduled Scorecards Report
+
+on:
+  schedule:
+    ## run every day at 9am
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+    generate-scorecard-report:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Generate Scorecard Report
+              uses: port-labs/port-sender@v0.1.13
+              with:
+                message_kind: scorecard_report
+                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+                port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+                slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+                blueprint: app
+                scorecard: productionReadiness
+```
+
+You can find more examples in the [examples folder](docs/examples/)

@@ -1,6 +1,9 @@
 name: Generate Scorecards Report
 
 on:
+  schedule:
+    ## run every day at 9am
+    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
