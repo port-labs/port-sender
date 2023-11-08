@@ -15,7 +15,7 @@ To find your Port API credentials go to Port, hover on the 3 dots button at the 
 
 ![Port Credentials](docs/assets/credentials-modal.png)
 
-### Slack
+# Slack
 
 Setting up a slack webhook
 Head to your slack apps page and create a new app (or select one of your existing apps). Then, go to the Incoming Webhooks page and create a new webhook, specifying the target channel on your server where messages that are sent to the slack webhook will be transferred.
