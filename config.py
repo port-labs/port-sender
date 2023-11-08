@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     port_region: str = "eu"
     blueprint: str
     scorecard: str
-    filter_rule: Optional[FilterRule] = Field(default=None)
+    filter_rule: Union[FilterRule, str, None] = Field(default=None)
     message_kind: MessageKind = MessageKind.scorecard_reminder
     target_kind: TargetKind = TargetKind.slack
 
