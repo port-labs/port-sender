@@ -3,6 +3,9 @@ from typing import Dict, List, Any
 import generators.base
 import utils
 
+from config import settings
+from port.utils import get_port_url
+
 
 class SlackMessageGenerator(generators.base.BaseMessageGenerator):
 
@@ -140,7 +143,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Visit the <https://app.getport.io/{blueprint}|Port> for more information."
+                    "text": f"Visit the <{get_port_url(settings.port_region, 'app')}|Port> for more information."
                 }
             }
         ]
@@ -273,7 +276,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
     def _generate_entities_list_with_level_and_link(blueprint: str,
                                                     entities_by_level: Dict[str, List[Dict[str, str]]]) -> str:
         text = ""
-        base_entity_url = f"https://app.getport.io/{blueprint}Entity?identifier="
+        base_entity_url = f"{get_port_url(settings.port_region, 'app')}/{blueprint}Entity?identifier="
         for level, entities in entities_by_level.items():
             if not entities:
                 continue

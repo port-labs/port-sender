@@ -14,7 +14,7 @@ class Handler:
     @classmethod
     def scorecard_reminder(cls):
         logger.info("Initializing Port client")
-        port_client = PortClient(settings.port_api_url, settings.port_client_id, settings.port_client_secret)
+        port_client = PortClient(settings.port_region, settings.port_client_id, settings.port_client_secret)
         logger.info(
             f"Fetching entities for query: {settings.filter_rule}, blueprint {settings.blueprint}, scorecard {settings.scorecard}")
         search_query = {
@@ -48,7 +48,7 @@ class Handler:
     @classmethod
     def scorecard_report(cls):
         logger.info("Initializing Port client")
-        port_client = PortClient(settings.port_api_url, settings.port_client_id, settings.port_client_secret)
+        port_client = PortClient(settings.port_region, settings.port_client_id, settings.port_client_secret)
         logger.info(
             f"Fetching entities for query: {settings.filter_rule}, blueprint {settings.blueprint}, scorecard {settings.scorecard}")
         search_query = {

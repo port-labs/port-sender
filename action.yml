@@ -10,6 +10,9 @@ inputs:
   port_client_secret:
     description: 'The Port Client Secret to use to authenticate with the API'
     required: true
+  port_region:
+    description: 'Port Region to use, if not provided will use the default region of the Port'
+    required: false
   slack_webhook_url:
     description: 'The URL of the Slack channel webhook to use to send messages'
     required: true

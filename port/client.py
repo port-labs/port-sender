@@ -2,13 +2,14 @@ import logging
 
 import requests
 
+from port.utils import get_port_url
 
 logger = logging.getLogger(__name__)
 
 
 class PortClient:
-    def __init__(self, api_url: str, client_id:str, client_secret:str):
-        self.api_url = api_url
+    def __init__(self, region: str, client_id:str, client_secret:str):
+        self.api_url = get_port_url(region, "api")
         self.access_token = self.get_token(client_id, client_secret)
         self.headers = {
             "Authorization": f"Bearer {self.access_token}",

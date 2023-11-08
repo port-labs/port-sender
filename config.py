@@ -21,10 +21,10 @@ class FilterRule(BaseModel):
 
 
 class Settings(BaseSettings):
-    port_api_url: str = "https://api.getport.io"
     port_client_id: str
     port_client_secret: str
     slack_webhook_url: str
+    port_region: str = "eu"
     blueprint: str
     scorecard: str
     filter_rule: Optional[FilterRule] = Field(default=None)
