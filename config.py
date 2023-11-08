@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings
 
 class MessageKind(str, Enum):
     generate_scorecards_reminders = "generate_scorecards_reminders"
+    generate_scorecard_report = "generate_scorecard_report"
 
 
 class TargetKind(str, Enum):
