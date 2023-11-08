@@ -6,8 +6,8 @@ from pydantic_settings import BaseSettings
 
 
 class MessageKind(str, Enum):
-    generate_scorecards_reminders = "generate_scorecards_reminders"
-    generate_scorecard_report = "generate_scorecard_report"
+    scorecard_reminder = "scorecard_reminder"
+    scorecard_report = "scorecard_report"
 
 
 class TargetKind(str, Enum):
@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     blueprint: str
     scorecard: str
     filter_rule: Optional[FilterRule] = Field(default=None)
-    message_kind: MessageKind = MessageKind.generate_scorecards_reminders
+    message_kind: MessageKind = MessageKind.scorecard_reminder
     target_kind: TargetKind = TargetKind.slack
 
     class Config:

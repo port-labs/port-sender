@@ -14,6 +14,9 @@ Port is the Developer Platform meant to supercharge your DevOps and Developers, 
 
 See [action.yml](action.yml) for inputs and outputs.
 
+
+ ![Generate Scorecard Report](docs/assets/generate-scorecard-report.png)
+
 ```yaml
 - uses: port-labs/port-sender@v0.1.19
   with:
@@ -22,5 +25,6 @@ See [action.yml](action.yml) for inputs and outputs.
     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     blueprint: service
     scorecard: Ownership
+    message_kind: scorecard_report
     filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend"]}'
 ```

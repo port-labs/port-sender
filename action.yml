@@ -3,7 +3,6 @@ description: Send Reminders and Reports from Port to Slack
 author: port-labs
 branding:
   icon: alert-circle
-  color: gray-dark
 inputs:
   port_client_id:
     description: 'The Port Client ID to use to authenticate with the API'
@@ -13,6 +12,9 @@ inputs:
     required: true
   slack_webhook_url:
     description: 'The URL of the Slack channel webhook to use to send messages'
+    required: true
+  message_kind:
+    description: 'The kind of message to send, either "scorecard_reminder" or "scorecard_report"'
     required: true
   blueprint:
     description: 'The identifier of the blueprint in Port which you want to send reminders and reports about'

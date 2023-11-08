@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Handler:
     @classmethod
-    def generate_scorecards_reminders(cls):
+    def scorecard_reminder(cls):
         logger.info("Initializing Port client")
         port_client = PortClient(settings.port_api_url, settings.port_client_id, settings.port_client_secret)
         logger.info(
@@ -39,14 +39,14 @@ class Handler:
             return
         if settings.target_kind == TargetKind.slack:
             logger.info(f"Generating scorecards reminders for {len(entities)} entities")
-            blocks = SlackMessageGenerator().generate_scorecards_reminders(settings.blueprint,
+            blocks = SlackMessageGenerator().scorecard_reminder(settings.blueprint,
                                                                            scorecard,
                                                                            entities)
             logger.info("Sending scorecards reminders to slack channel")
             Slack().send_message(blocks)
 
     @classmethod
-    def generate_scorecard_report(cls):
+    def scorecard_report(cls):
         logger.info("Initializing Port client")
         port_client = PortClient(settings.port_api_url, settings.port_client_id, settings.port_client_secret)
         logger.info(
@@ -73,7 +73,7 @@ class Handler:
             return
         if settings.target_kind == TargetKind.slack:
             logger.info(f"Generating scorecard report for {len(entities)} entities")
-            blocks = SlackMessageGenerator().generate_scorecard_report(settings.blueprint,
+            blocks = SlackMessageGenerator().scorecard_report(settings.blueprint,
                                                                        scorecard,
                                                                        entities)
             logger.info("Sending scorecard report to slack channel")
