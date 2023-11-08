@@ -6,6 +6,10 @@
 
 Port is the Developer Platform meant to supercharge your DevOps and Developers, and allow you to regain control of your environment.
 
+Using this action you will allow you to send reports and reminders automatically on a daily basis regarding initiatives you are trying to drive in your organization.
+
+![Scorecard Report](docs/assets/scorecard-report.png)
+
 ## Pre-requisites
 
 ### Port
