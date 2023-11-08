@@ -3,6 +3,7 @@ description: Send Reminders and Reports from Port to Slack
 author: port-labs
 branding:
   icon: alert-circle
+  color: gray-dark
 inputs:
   port_client_id:
     description: 'The Port Client ID to use to authenticate with the API'
