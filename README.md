@@ -4,9 +4,9 @@
 
 [![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/devex-community/shared_invite/zt-1bmf5621e-GGfuJdMPK2D8UN58qL4E_g)
 
-Port is the Developer Platform meant to supercharge your DevOps and Developers, and allow you to regain control of your environment.
+Port is an open internal developer portal. The portal contains valuable data about standards and compliance (in the form of scorecards or initiatives) about software catalog entities, such as the production readiness (scorecard) of a microservice (an entity).
 
-This action will allow you to send reports and reminders automatically on a daily/weekly/monthly basis regarding initiatives you are trying to drive in your organization.
+This action will allow you to automatically send reports and reminders with regard to initiatives or scorecards, letting managers and developers know what standards need to be met that are relevant to them.
 
 ![Scorecard Report](docs/assets/scorecard-report.png)
 
