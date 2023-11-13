@@ -24,7 +24,7 @@ To find your Port API credentials go to Port, hover on the 3 dots button at the 
 Setting up a slack webhook
 Head to your [Slack apps](https://api.slack.com/apps) page and create a new app (or select one of your existing apps). Then, go to the Incoming Webhooks page and create a new webhook, specifying the target channel on your server where messages that are sent to the slack webhook will be transferred.
 
-Copy the webhook URL, you will use it soon to set up your
+Copy the webhook URL, you will use it soon to set up your GitHub action.
 
 ## Send Scorecard Report
 
