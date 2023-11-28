@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class PortClient:
-    def __init__(self, region: str, client_id:str, client_secret:str):
+    def __init__(self, region: str, client_id: str, client_secret: str):
         self.api_url = get_port_url(region, "api")
         self.access_token = self.get_token(client_id, client_secret)
         self.headers = {
@@ -41,4 +41,3 @@ class PortClient:
         )
         scorecard_req.raise_for_status()
         return scorecard_req.json()
-

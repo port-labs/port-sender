@@ -14,9 +14,9 @@ class BaseMessageGenerator(abc.ABC):
 
 class BaseTicketGenerator(abc.ABC):
     @abc.abstractmethod
-    def generate_task(self, scorecard: Dict[str, Any], entity: Dict[str,Any], blueprint: str, level: str):
+    def generate_task(self, scorecard: Dict[str, Any], entity: Dict[str, Any], blueprint: str, level: str):
         pass
 
     @abc.abstractmethod
-    def generate_subtask(self, rule: Dict[str, Any], scorecard_title: str, entity: Dict[str,Any], parent_key: str):
+    def generate_subtask(self, rule: Dict[str, Any], scorecard_title: str, entity: Dict[str, Any], parent_key: str):
         pass

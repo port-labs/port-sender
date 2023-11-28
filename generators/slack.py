@@ -150,9 +150,9 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         return blocks
 
     def scorecard_reminder(self,
-                                      blueprint: str,
-                                      scorecard: Dict[str, Any],
-                                      entities: list) -> List[Dict[str, Any]]:
+                           blueprint: str,
+                           scorecard: Dict[str, Any],
+                           entities: list) -> List[Dict[str, Any]]:
         blueprint_plural = utils.convert_to_plural(blueprint).title()
         entities_didnt_pass_gold_level = {
             "Silver": [],

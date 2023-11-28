@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Union, Optional
+from typing import List, Union
 
 from pydantic import Field, BaseModel
 from pydantic_settings import BaseSettings
@@ -37,8 +37,6 @@ class Settings(BaseSettings):
     filter_rule: Union[FilterRule, str, None] = Field(default=None)
     operation_kind: OperationKind = OperationKind.scorecard_reminder
     target_kind: TargetKind = TargetKind.slack
-    scorecards_singular_operators: List[str] = ["isEmpty", "isNotEmpty"]
-
 
     class Config:
         env_prefix = "INPUT_"

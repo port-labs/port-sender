@@ -1,5 +1,6 @@
 import logging
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 from slack_sdk.webhook import WebhookClient
 
 from config import settings
