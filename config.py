@@ -25,12 +25,12 @@ class FilterRule(BaseModel):
 class Settings(BaseSettings):
     port_client_id: str
     port_client_secret: str
-    slack_webhook_url: str
-    jira_project_id: str
+    slack_webhook_url: str = ""
+    jira_project_id: str = ""
     jira_api_endpoint: str = "https://jira.com"
-    jira_email: str
-    jira_resolve_transition_id: int
-    jira_token: str
+    jira_email: str = ""
+    jira_resolve_transition_id: int = ""
+    jira_token: str = ""
     port_region: str = "eu"
     blueprint: str
     scorecard: str
