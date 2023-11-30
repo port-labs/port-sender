@@ -82,6 +82,9 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "text": f"Here is a summary of the current {scorecard_title} scorecard status ⭐️"
                 }
             },
+        ]
+        if entities_by_level_text:
+            blocks += [
             {
                 "type": "section",
                 "text": {
@@ -95,7 +98,26 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "type": "mrkdwn",
                     "text": entities_by_level_text
                 }
-            },
+            }]
+        else:
+            blocks += [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*:vertical_traffic_light: {blueprint_plural} by level*"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "There are no entities with scorecard data :disappointed:"
+                    }
+                }
+            ]
+        if top_teams_text:
+            blocks += [
             {
                 "type": "section",
                 "text": {
@@ -107,10 +129,12 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": top_teams_text if top_teams_text else
-                    "There are no teams with scorecard data :disappointed:"
+                    "text": top_teams_text
                 }
             },
+            ]
+        if top_highest_scored_rules_text:
+            blocks += [
             {
                 "type": "section",
                 "text": {
@@ -124,21 +148,27 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "type": "mrkdwn",
                     "text": top_highest_scored_rules_text
                 }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "*:warning: Lowest scoring rules*"
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": top_lowest_scored_rules_text
-                }
-            },
+            }
+            ]
+        if top_lowest_scored_rules_text:
+            blocks += [
+
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*:warning: Lowest scoring rules*"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": top_lowest_scored_rules_text
+                    }
+                },
+            ]
+        blocks += [
             {
                 "type": "section",
                 "text": {
