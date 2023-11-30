@@ -76,16 +76,15 @@ class JiraHandler(BaseHandler):
                         f"AND summary~'{generated_subtask['fields']['summary']}' "
                         f"AND issuetype = Subtask "
                         f"AND resolution is EMPTY "
-                        f"ORDER BY created DESC"
-                        f""
+                        f"AND parent = '{parent_key}'"
                     )
                     rule_search_result = Jira().search_issue(subtask_search_query)
                     subtask_exists = rule_search_result["total"] > 0
+
                     if rule.get("status", "") == "SUCCESS":
                         if subtask_exists:
                             Jira().resolve_issue(
-                                rule_search_result["issues"][0]["key"],
-                                settings.jira_resolve_transition_id,
+                                rule_search_result["issues"][0]["key"]
                             )
                     else:
                         level_rules_completed = False
@@ -94,5 +93,5 @@ class JiraHandler(BaseHandler):
 
                 if level_rules_completed and task_exists:
                     Jira().resolve_issue(
-                        parent_key, settings.jira_resolve_transition_id
+                        parent_key
                     )

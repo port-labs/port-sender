@@ -17,6 +17,6 @@ class Slack:
         logger.info("Sending message to slack channel")
         response = self.webhook.send(blocks=blocks)
 
-        logger.info("Message sent to slack channel: {response.status_code}")
+        logger.info(f"Message sent to slack channel: {response.status_code}")
 
         return response.status_code

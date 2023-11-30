@@ -50,11 +50,29 @@ class Jira:
         issue_response.raise_for_status()
         return issue_response.json()
 
-    def resolve_issue(self, issue_key: str, transition_id: str):
-
+    def resolve_issue(self, issue_key: str):
         logger.info(f"Setting new status of issue {issue_key}")
 
-        body = {"transition": {"id": transition_id}}
+        if not settings.jira_resolve_transition_id:
+            # Looking for a default resolve transition id
+            logger.info("Jira transition id parameter was not inserted,"
+                        " getting the default from the Jira project")
+
+            transitions_response = requests.request(
+                "GET",
+                f"{self.api_url}/issue/{issue_key}/transitions",
+                headers=self.headers
+            ).json()
+            resolved_transition = next((t["id"] for t in transitions_response["transitions"]
+                                        if t['to']['name'] == 'Done'), None)
+        else:
+            resolved_transition = settings.jira_resolve_transition_id
+
+            if not resolved_transition:
+                logger.info("Jira transition to done was not found,"
+                            " please enter the jira_resolve_transition_id parameter")
+
+        body = {"transition": {"id": resolved_transition}}
         issue_response = requests.request(
             "POST",
             f"{self.api_url}/issue/{issue_key}/transitions",
