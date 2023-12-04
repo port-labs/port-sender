@@ -127,7 +127,6 @@ jobs:
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
 ```
 
-You can find more examples in the [examples folder](docs/examples/)
 
 ## Manage scorecards with Jira issues 
 A call to action to sync Jira issues (create/reopen/resolve) with scorecards and rules.
@@ -163,13 +162,16 @@ Generated subtasks for the task:
 | `jira_resolve_transition_id` | The Jira [transition](https://support.atlassian.com/jira-software-cloud/docs/transition-an-issue/) ID used for resolving issues. If not inserted will use the default transition for the "Done" status.  | false    |         |
 | `jira_reopen_transition_id`  | The Jira [transition](https://support.atlassian.com/jira-software-cloud/docs/transition-an-issue/) ID used for resolving issues. If not inserted will use the default transition for the "To Do" status. | false    |         |
 
-This example will send a scheduled reminder to a Slack channel about all the services that didn't reach the Gold level in the `productionReadiness` scorecard for the Backend Team.
+This example will create a Jira task for every service in every level that are not completed in the `productionReadiness` scorecard for the Backend Team.
+For every rule in the scorecard that is not completed, a subtask under the relevant task in Jira will be created.
+Once the scorecard is completed, the tasks and subtasks will be resolved (passed to Done status).
 
 You can modify the schedule to run the reminder on a daily/weekly/monthly basis. For more information about scheduling, refer to the [GitHub Actions documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
+
 You can also modify the filter rule to filter the services, ideally you would want to filter by team, so that each team will get a reminder about their services.
 
 ```yaml
-name: Generate Scorecards Reminders
+name: Sync Jira Issues with Scorecard Initiatives
 
 on:
   schedule:
@@ -178,19 +180,25 @@ on:
   workflow_dispatch:
 
 jobs:
-    generate-scorecards-reminders:
+    sync-jira-issues:
         runs-on: ubuntu-latest
         steps:
-            - name: Generate Scorecards Reminders
-              uses: port-labs/port-sender@v0.1.15
+            - name: Sync Jira Issues
+              uses: port-labs/port-sender@v0.2.0
               with:
-                message_kind: scorecard_reminder
+                operation_kind: ticket_handler
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
-                slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
                 blueprint: app
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
+                jira_api_endpoint: https://example.atlassian.net
+                jira_email: matar@getport.io
+                jira_project_id: EXAMPLE
+                jira_token: MY-JIRA-TOKEN
+
+                target_kind: jira
+
 ```
 
 You can find more examples in the [examples folder](docs/examples/)
