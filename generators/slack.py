@@ -1,8 +1,7 @@
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 import generators.base
 import utils
-
 from config import settings
 from port.utils import get_port_url
 
@@ -85,20 +84,20 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         ]
         if entities_by_level_text:
             blocks += [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"*:vertical_traffic_light: {blueprint_plural} by level*"
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": entities_by_level_text
-                }
-            }]
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*:vertical_traffic_light: {blueprint_plural} by level*"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": entities_by_level_text
+                    }
+                }]
         else:
             blocks += [
                 {
@@ -118,37 +117,37 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             ]
         if top_teams_text:
             blocks += [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "*:chart_with_upwards_trend: Top teams*"
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": top_teams_text
-                }
-            },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*:chart_with_upwards_trend: Top teams*"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": top_teams_text
+                    }
+                },
             ]
         if top_highest_scored_rules_text:
             blocks += [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "*:white_check_mark: Highest scoring rules*"
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*:white_check_mark: Highest scoring rules*"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": top_highest_scored_rules_text
+                    }
                 }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": top_highest_scored_rules_text
-                }
-            }
             ]
         if top_lowest_scored_rules_text:
             blocks += [
@@ -180,9 +179,9 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         return blocks
 
     def scorecard_reminder(self,
-                                      blueprint: str,
-                                      scorecard: Dict[str, Any],
-                                      entities: list) -> List[Dict[str, Any]]:
+                           blueprint: str,
+                           scorecard: Dict[str, Any],
+                           entities: list) -> List[Dict[str, Any]]:
         blueprint_plural = utils.convert_to_plural(blueprint).title()
         entities_didnt_pass_gold_level = {
             "Silver": [],

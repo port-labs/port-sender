@@ -1,0 +1,25 @@
+name: Sync Jira issues based on scorecards
+
+
+on:
+  workflow_dispatch:
+
+jobs:
+    sync-jira-issues:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Sync Jira Issues
+              uses: port-labs/port-sender@v0.2.0
+              with:
+                operation_kind: ticket_handler
+                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+                port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+                blueprint: app
+                scorecard: productionReadiness
+                filter_rule: '{"property": "$team","operator": "containsAny","value": ["AAA"]}'
+                jira_api_endpoint: https://getport.atlassian.net
+                jira_email: matar@getport.io
+                jira_project_id: DEMO
+                jira_token: {{ secrets.JIRA_TOKEN }}
+
+                target_kind: jira

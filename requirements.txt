@@ -3,3 +3,4 @@ slack_sdk~=3.23.0
 requests~=2.29.0
 inflect~=7.0.0
 pydantic-settings~=2.0.3
+httpx~=0.25.1
