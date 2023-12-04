@@ -66,7 +66,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Generate Scorecard Report
-              uses: port-labs/port-sender@v0.2.2
+              uses: port-labs/port-sender@v0.2.3
               with:
                 message_kind: scorecard_report
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
@@ -74,6 +74,7 @@ jobs:
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
                 blueprint: app
                 scorecard: productionReadiness
+                target_kind: slack
 ```
 
 ## Send Scorecard Reminder
@@ -116,7 +117,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Generate Scorecards Reminders
-              uses: port-labs/port-sender@v0.2.2
+              uses: port-labs/port-sender@v0.2.3
               with:
                 message_kind: scorecard_reminder
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
@@ -125,6 +126,7 @@ jobs:
                 blueprint: app
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
+                target_kind: slack
 ```
 
 
@@ -184,7 +186,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Sync Jira Issues
-              uses: port-labs/port-sender@v0.2.2
+              uses: port-labs/port-sender@v0.2.3
               with:
                 operation_kind: ticket_handler
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
