@@ -66,7 +66,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Generate Scorecard Report
-              uses: port-labs/port-sender@v0.1.15
+              uses: port-labs/port-sender@v0.2.1
               with:
                 message_kind: scorecard_report
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
@@ -116,7 +116,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Generate Scorecards Reminders
-              uses: port-labs/port-sender@v0.1.15
+              uses: port-labs/port-sender@v0.2.1
               with:
                 message_kind: scorecard_reminder
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
@@ -184,7 +184,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Sync Jira Issues
-              uses: port-labs/port-sender@v0.2.0
+              uses: port-labs/port-sender@v0.2.1
               with:
                 operation_kind: ticket_handler
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
@@ -195,7 +195,7 @@ jobs:
                 jira_api_endpoint: https://example.atlassian.net
                 jira_email: matar@getport.io
                 jira_project_id: EXAMPLE
-                jira_token: MY-JIRA-TOKEN
+                jira_token: ${{ secrets.JIRA_TOKEN }}
 
                 target_kind: jira
 
