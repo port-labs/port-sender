@@ -10,7 +10,7 @@ jobs:
             - name: Generate Scorecard Report
               uses: port-labs/port-sender@v0.2.0
               with:
-                message_kind: scorecard_report
+                operation_kind: scorecard_report
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
