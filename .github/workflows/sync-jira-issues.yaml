@@ -20,6 +20,6 @@ jobs:
                 jira_api_endpoint: https://getport.atlassian.net
                 jira_email: matar@getport.io
                 jira_project_id: DEMO
-                jira_token: ${{ secrets.JIRA_TOKEN }}
+                jira_token: {{ secrets.JIRA_TOKEN }}
 
                 target_kind: jira
