@@ -11,7 +11,7 @@ jobs:
             - name: Generate Scorecards Reminders
               uses: port-labs/port-sender@v0.1.15
               with:
-                message_kind: scorecard_reminder
+                operation_kind: scorecard_reminder
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
