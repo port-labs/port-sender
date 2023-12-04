@@ -25,5 +25,5 @@ Thumbs.db
 *.code-workspace
 
 #Pycache
-__pycache__*
+*__pycache__*
 .pyc

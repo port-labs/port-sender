@@ -1,4 +1,4 @@
-name: Generate Scorecards Reminders
+name: Sync Jira Issues with Scorecard Initiatives
 
 on:
   schedule:
@@ -7,16 +7,15 @@ on:
   workflow_dispatch:
 
 jobs:
-    generate-scorecards-reminders:
+    sync-jira-issues:
         runs-on: ubuntu-latest
         steps:
-            - name: Generate Jira Issues
-              uses: port-labs/port-sender@v0.1.14
+            - name: Sync Jira Issues
+              uses: port-labs/port-sender@v0.2.0
               with:
-                operation_kind: scorecard_reminder
+                operation_kind: ticket_handler
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
-                slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
                 blueprint: app
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
@@ -24,6 +23,7 @@ jobs:
                 jira_email: matar@getport.io
                 jira_project_id: EXAMPLE
                 jira_token: MY-JIRA-TOKEN
+
                 target_kind: jira
 
 

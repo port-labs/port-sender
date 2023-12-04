@@ -87,9 +87,6 @@ class Jira:
                     f"{issue_fields['summary']}")
 
         if not settings.jira_reopen_transition_id:
-            # Looking for a default resolve transition id
-            logger.info("Jira transition id parameter was not inserted,"
-                        " getting the default from the Jira project")
 
             transitions_response = requests.request(
                 "GET",
