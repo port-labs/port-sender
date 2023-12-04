@@ -1,4 +1,4 @@
-name: Generate Scorecards Reminders
+name: Sync Jira issues based on scorecards
 
 
 on:
