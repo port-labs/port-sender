@@ -1,5 +1,5 @@
-name: Port Message Sender
-description: Send Reminders and Reports from Port to Slack
+name: Port Sender
+description: Manage Scorecards using 3rd party apps
 author: port-labs
 branding:
   icon: alert-circle
@@ -15,10 +15,10 @@ inputs:
     description: 'Port Region to use, if not provided will use the default region of the Port'
     required: false
   slack_webhook_url:
-    description: 'The URL of the Slack channel webhook to use to send messages'
-    required: true
-  message_kind:
-    description: 'The kind of message to send, either "scorecard_reminder" or "scorecard_report"'
+    description: 'The URL of the Slack channel webhook to use to send messages. Required when using "target_kind" slack'
+    required: false
+  operation_kind:
+    description: 'The kind of operation to perform, either "scorecard_reminder", "scorecard_report" or "ticket_handler"'
     required: true
   blueprint:
     description: 'The identifier of the blueprint in Port which you want to send reminders and reports about'
@@ -29,6 +29,28 @@ inputs:
   filter_rule:
     description: 'filter to use to filter the response, for example: {"property": "$team","operator": "containsAny","value": ["Backend"]}'
     required: false
+  target_kind:
+    description: 'The target platform to integrate with. Can be either "slack" or "jira". Default is "slack'
+    required: false
+  jira_api_endpoint:
+    description: 'The URL of your Jira organization. Required when using "target_kind" jira'
+    required: false
+  jira_email:
+    description: 'The Jira email of the user account for using Jira REST API.  Required when using "target_kind" jira'
+    required: false
+  jira_project_id:
+    description: 'The project id in Jira for tasks updating. Required when using "target_kind" jira'
+    required: false
+  jira_token:
+    description: 'The Jira API token for using Jiras REST API. Required when using "target_kind" jira'
+    required: false
+  jira_resolve_transition_id:
+    description: 'The Jira transition ID used for resolving issues. If not inserted will use the default transition for the "Done" status.'
+    required: false
+  jira_reopen_transition_id:
+    description: 'The Jira transition ID used for reopening issues. If not inserted will use the default transition for the "To Do" status.'
+    required: false
+  
 runs:
   using: docker
   image: Dockerfile
