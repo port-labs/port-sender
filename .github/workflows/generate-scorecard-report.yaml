@@ -16,3 +16,4 @@ jobs:
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
                 blueprint: app
                 scorecard: productionReadiness
+                target_kind: slack
