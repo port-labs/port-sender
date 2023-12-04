@@ -44,7 +44,7 @@ Action to send a scorecard report to a Slack channel about the current state and
 | `slack_webhook_url`  | Slack Webhook URL                                                                                        | true     |         |
 | `blueprint`          | Blueprint identifier                                                                                     | true     |         |
 | `scorecard`          | Scorecard identifier                                                                                     | true     |         |
-| `message_kind`       | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                | true     |         |
+| `operation_kind`     | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                | true     |         |
 | `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 This action will send a scorecard report to a Slack channel about the current state and progress in a scorecard.
@@ -86,15 +86,15 @@ A call to action to remind the team that some of their services didn't reach Gol
 
 ### Usage
 
-| Input                | Description                                                                  | Required | Default |
-|----------------------|------------------------------------------------------------------------------|----------|---------|
-| `port_client_id`     | Port Client ID                                                               | true     |         |
-| `port_client_secret` | Port Client Secret                                                           | true     |         |
-| `port_region`        | Port Region to use, if not provided will use the default region of Port | false    | eu        |
-| `slack_webhook_url`  | Slack Webhook URL                                                            | true     |         |
-| `blueprint`          | Blueprint identifier                                                         | true     |         |
-| `scorecard`          | Scorecard identifier                                                         | true     |         |
-| `message_kind`       | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder` | true     |         |
+| Input                | Description                                                                                               | Required | Default |
+|----------------------|-----------------------------------------------------------------------------------------------------------|----------|---------|
+| `port_client_id`     | Port Client ID                                                                                            | true     |         |
+| `port_client_secret` | Port Client Secret                                                                                        | true     |         |
+| `port_region`        | Port Region to use, if not provided will use the default region of Port                                   | false    | eu        |
+| `slack_webhook_url`  | Slack Webhook URL                                                                                         | true     |         |
+| `blueprint`          | Blueprint identifier                                                                                      | true     |         |
+| `scorecard`          | Scorecard identifier                                                                                      | true     |         |
+| `operation_kind`     | Opetation kind to perform, to send Scorecard Reminder, pass - `scorecard_reminder`                        | true     |         |
 | `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 This example will send a scheduled reminder to a Slack channel about all the services that didn't reach the Gold level in the `productionReadiness` scorecard for the Backend Team.
@@ -130,24 +130,38 @@ jobs:
 You can find more examples in the [examples folder](docs/examples/)
 
 ## Manage scorecards with Jira issues 
-A call to action to create Jira issues for uncompleted scorecards and rules.
+A call to action to sync Jira issues (create/reopen/resolve) with scorecards and rules.
+
+For every scorecard level that is not completed, a Jira task will be created and Subtasks for the level rules.
 
 ### Output example
 
- ![Scorecard Reminder](docs/assets/scorecard-reminder.png)
+Generated Scorecard task for the bronze level:
+ ![Jira Task](docs/assets/jira-sync-task.png)
+
+Generated subtasks for the task:
+![Jira Subtask](docs/assets/jira-sync-subtask.png)
+
+
 
 ### Usage
 
-| Input                | Description                                                                  | Required | Default |
-|----------------------|------------------------------------------------------------------------------|----------|---------|
-| `port_client_id`     | Port Client ID                                                               | true     |         |
-| `port_client_secret` | Port Client Secret                                                           | true     |         |
-| `port_region`        | Port Region to use, if not provided will use the default region of Port | false    | eu        |
-| `slack_webhook_url`  | Slack Webhook URL                                                            | true     |         |
-| `blueprint`          | Blueprint identifier                                                         | true     |         |
-| `scorecard`          | Scorecard identifier                                                         | true     |         |
-| `message_kind`       | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder` | true     |         |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
+| Input                        | Description                                                                                                                                                                                              | Required | Default |
+|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------|
+| `port_client_id`             | Port Client ID                                                                                                                                                                                           | true     |         |
+| `port_client_secret`         | Port Client Secret                                                                                                                                                                                       | true     |         |
+| `port_region`                | Port Region to use, if not provided will use the default region of Port                                                                                                                                  | false    | eu        |
+| `slack_webhook_url`          | Slack Webhook URL                                                                                                                                                                                        | true     |         |
+| `blueprint`                  | Blueprint identifier                                                                                                                                                                                     | true     |         |
+| `scorecard`                  | Scorecard identifier                                                                                                                                                                                     | true     |         |
+| `opeation_kind`              | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder`                                                                                                                            | true     |         |
+| `filter_rule`                | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
+| `jira_project_id`            | The [project id](https://confluence.atlassian.com/jirakb/how-to-get-project-id-from-the-jira-user-interface-827341414.html) in Jira for tasks updating                                                   | true     |         |
+| `jira_api_endpoint`          | The URL of your Jira organization                                                                                                                                                                        | true     |         |
+| `jira_token`                 | The [Jira API token ](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/)for using Jira's REST API.                                                      | true     |         |
+| `jira_email`                 | The Jira email of the user account for using Jira's REST API.                                                                                                                                            | true     |         |
+| `jira_resolve_transition_id` | The Jira [transition](https://support.atlassian.com/jira-software-cloud/docs/transition-an-issue/) ID used for resolving issues. If not inserted will use the default transition for the "Done" status.  | false    |         |
+| `jira_reopen_transition_id`  | The Jira [transition](https://support.atlassian.com/jira-software-cloud/docs/transition-an-issue/) ID used for resolving issues. If not inserted will use the default transition for the "To Do" status. | false    |         |
 
 This example will send a scheduled reminder to a Slack channel about all the services that didn't reach the Gold level in the `productionReadiness` scorecard for the Backend Team.
 
