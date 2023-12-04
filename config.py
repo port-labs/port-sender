@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Union
 
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 
 

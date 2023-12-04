@@ -1,10 +1,9 @@
 import logging
 
 from config import settings
+from core.base_handler import BaseHandler
 from generators.jira import JiraIssueGenerator
 from targets.jira import Jira
-
-from core.base_handler import BaseHandler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -55,7 +54,8 @@ class JiraHandler(BaseHandler):
                 else:
                     task = task_search_result["issues"][0]
                     parent_key = task["key"]
-                    if task["fields"]["resolution"] and not scorecard_level_completed:
+                    if (task["fields"]["resolution"] and
+                            not scorecard_level_completed):
                         Jira().reopen_issue(task)
 
                 for rule in rules_by_level[level]:
@@ -89,6 +89,6 @@ class JiraHandler(BaseHandler):
                         Jira().create_issue(generated_subtask)
 
                 if (scorecard_level_completed and
-                    task_exists and not
-                    task["fields"]["resolution"]):
+                    task_exists and
+                    not task["fields"]["resolution"]):
                     Jira().resolve_issue(task)

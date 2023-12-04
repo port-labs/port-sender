@@ -1,16 +1,16 @@
 import base64
+import logging
 from typing import Any
 from urllib.parse import quote
 
 import requests
-import logging
 from requests.auth import HTTPBasicAuth
 
 from config import settings
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class Jira:
     def __init__(self) -> None:
@@ -94,7 +94,7 @@ class Jira:
                 headers=self.headers
             ).json()
             reopen_transition = next((t["id"] for t in transitions_response["transitions"]
-                                        if t['to']['name'] == 'To Do'), None)
+                                      if t['to']['name'] == 'To Do'), None)
         else:
             reopen_transition = settings.jira_reopen_transition_id
 

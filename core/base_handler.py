@@ -11,7 +11,9 @@ class BaseHandler:
     def __init__(self):
         logger.info("Initializing Port client")
         port_client = PortClient(
-            settings.port_region, settings.port_client_id, settings.port_client_secret
+            settings.port_region,
+            settings.port_client_id,
+            settings.port_client_secret
         )
         logger.info(
             f"Fetching entities for query:"
@@ -22,7 +24,8 @@ class BaseHandler:
         search_query = {
             "combinator": "and",
             "rules": [
-                {"property": "$blueprint", "operator": "=", "value": settings.blueprint}
+                {"property": "$blueprint",
+                 "operator": "=", "value": settings.blueprint}
             ],
         }
         if settings.filter_rule:

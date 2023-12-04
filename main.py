@@ -1,9 +1,9 @@
+from typing import Dict, Type
+
+from config import settings
+from core.base_handler import BaseHandler
 from core.jira_handler import JiraHandler
 from core.slack_handler import SlackHandler
-from core.base_handler import BaseHandler
-from config import settings
-
-from typing import Dict, Type
 
 HANDLERS: Dict[str, Type[BaseHandler]] = {
    "jira": JiraHandler,
