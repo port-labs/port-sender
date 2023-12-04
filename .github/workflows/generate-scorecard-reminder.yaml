@@ -18,4 +18,4 @@ jobs:
                 blueprint: app
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
-                target_kind: 'slack'
+                target_kind: slack
