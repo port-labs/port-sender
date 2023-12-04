@@ -16,9 +16,7 @@ class JiraHandler(BaseHandler):
             logger.info("No entities found")
             return
 
-        logger.info(
-            f"Generating scorecards tickets for" f" {len(self.entities)} entities"
-        )
+        logger.info("Searching for Jira issues to create / update")
 
         for entity in self.entities:
             entity_scorecard = entity.get("scorecards", {}).get(
@@ -44,20 +42,21 @@ class JiraHandler(BaseHandler):
                     f"project={settings.jira_project_id} "
                     f"AND summary~'{task_summary}' "
                     f"AND issuetype = Task "
-                    f"AND resolution is EMPTY "
                     f"ORDER BY created DESC"
                 )
                 task_search_result = Jira().search_issue(task_search_query)
-                level_rules_completed = True
+
                 task_exists = task_search_result["total"] > 0
+
                 if not task_exists:
                     if scorecard_level_completed:
                         continue
-                    logger.info("Issue doesn't exist, creating issue")
-                    response = Jira().create_issue(generated_task)
-                    parent_key = response["key"]
+                    parent_key = Jira().create_issue(generated_task)["key"]
                 else:
-                    parent_key = task_search_result["issues"][0]["key"]
+                    task = task_search_result["issues"][0]
+                    parent_key = task["key"]
+                    if task["fields"]["resolution"] and not scorecard_level_completed:
+                        Jira().reopen_issue(task)
 
                 for rule in rules_by_level[level]:
                     full_rule_object = [
@@ -75,23 +74,21 @@ class JiraHandler(BaseHandler):
                         f"project={settings.jira_project_id} "
                         f"AND summary~'{generated_subtask['fields']['summary']}' "
                         f"AND issuetype = Subtask "
-                        f"AND resolution is EMPTY "
                         f"AND parent = '{parent_key}'"
                     )
                     rule_search_result = Jira().search_issue(subtask_search_query)
-                    subtask_exists = rule_search_result["total"] > 0
+                    rule_successful = rule.get("status", "") == "SUCCESS"
 
-                    if rule.get("status", "") == "SUCCESS":
-                        if subtask_exists:
-                            Jira().resolve_issue(
-                                rule_search_result["issues"][0]["key"]
-                            )
-                    else:
-                        level_rules_completed = False
-                        if not subtask_exists:
-                            Jira().create_issue(generated_subtask)
+                    if rule_search_result["total"] > 0:
+                        subtask = rule_search_result.get("issues", [])[0]
+                        if rule_successful and not subtask["fields"]["resolution"]:
+                            Jira().resolve_issue(subtask)
+                        elif not rule_successful and subtask["fields"]["resolution"]:
+                            Jira().reopen_issue(subtask)
+                    elif not rule_successful:
+                        Jira().create_issue(generated_subtask)
 
-                if level_rules_completed and task_exists:
-                    Jira().resolve_issue(
-                        parent_key
-                    )
+                if (scorecard_level_completed and
+                    task_exists and not
+                    task["fields"]["resolution"]):
+                    Jira().resolve_issue(task)

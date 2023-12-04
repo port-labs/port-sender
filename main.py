@@ -13,5 +13,5 @@ HANDLERS: Dict[str, Type[BaseHandler]] = {
 if __name__ == '__main__':
     operation_kind = settings.operation_kind
     handler = HANDLERS.get(settings.target_kind, SlackHandler)()
-    message_kind_handler = getattr(handler, settings.operation_kind)
-    message_kind_handler()
+    operation_kind_handler = getattr(handler, settings.operation_kind)
+    operation_kind_handler()

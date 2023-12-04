@@ -3,11 +3,14 @@ from typing import Any
 from urllib.parse import quote
 
 import requests
-from loguru import logger
+import logging
 from requests.auth import HTTPBasicAuth
 
 from config import settings
 
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class Jira:
     def __init__(self) -> None:
@@ -26,7 +29,7 @@ class Jira:
         }
 
     def create_issue(self, params: dict[str, Any]) -> dict[str, Any]:
-        logger.info("Creating Jira issue")
+        logger.info(f"Creating new issue: {params['fields']['summary']}")
 
         create_issue_response = requests.request(
             "POST", f"{self.api_url}/issue", json=params, headers=self.headers
@@ -34,12 +37,9 @@ class Jira:
 
         create_issue_response.raise_for_status()
 
-        logger.info("Issue created successfully")
         return create_issue_response.json()
 
     def search_issue(self, jql_query: str) -> bool:
-
-        logger.info("Searching Jira issue")
 
         issue_response = requests.request(
             "GET",
@@ -50,8 +50,12 @@ class Jira:
         issue_response.raise_for_status()
         return issue_response.json()
 
-    def resolve_issue(self, issue_key: str):
-        logger.info(f"Setting new status of issue {issue_key}")
+    def resolve_issue(self, issue: dict[str, Any]):
+        issue_fields = issue["fields"]
+        key = issue["key"]
+        logger.info(f"Resolving {issue_fields['issuetype']['name']}:"
+                    f" {key} - "
+                    f"{issue_fields['summary']}")
 
         if not settings.jira_resolve_transition_id:
             # Looking for a default resolve transition id
@@ -60,7 +64,7 @@ class Jira:
 
             transitions_response = requests.request(
                 "GET",
-                f"{self.api_url}/issue/{issue_key}/transitions",
+                f"{self.api_url}/issue/{key}/transitions",
                 headers=self.headers
             ).json()
             resolved_transition = next((t["id"] for t in transitions_response["transitions"]
@@ -71,8 +75,41 @@ class Jira:
             if not resolved_transition:
                 logger.info("Jira transition to done was not found,"
                             " please enter the jira_resolve_transition_id parameter")
+                return
 
-        body = {"transition": {"id": resolved_transition}}
+        return self.transition_issue(key, resolved_transition)
+
+    def reopen_issue(self, issue: dict[str, Any]):
+        issue_fields = issue["fields"]
+        key = issue["key"]
+        logger.info(f"Reopening {issue_fields['issuetype']['name']}:"
+                    f" {key} - "
+                    f"{issue_fields['summary']}")
+
+        if not settings.jira_reopen_transition_id:
+            # Looking for a default resolve transition id
+            logger.info("Jira transition id parameter was not inserted,"
+                        " getting the default from the Jira project")
+
+            transitions_response = requests.request(
+                "GET",
+                f"{self.api_url}/issue/{key}/transitions",
+                headers=self.headers
+            ).json()
+            reopen_transition = next((t["id"] for t in transitions_response["transitions"]
+                                        if t['to']['name'] == 'To Do'), None)
+        else:
+            reopen_transition = settings.jira_reopen_transition_id
+
+            if not reopen_transition:
+                logger.info("Jira transition to To Do was not found,"
+                            " please enter the jira_resolve_transition_id parameter")
+                return
+
+        return self.transition_issue(key, reopen_transition)
+
+    def transition_issue(self, issue_key: str, transition_id: str):
+        body = {"transition": {"id": transition_id}}
         issue_response = requests.request(
             "POST",
             f"{self.api_url}/issue/{issue_key}/transitions",

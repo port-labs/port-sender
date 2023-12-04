@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     jira_api_endpoint: str = "https://jira.com"
     jira_email: str = ""
     jira_resolve_transition_id: str = ""
+    jira_reopen_transition_id: str = ""
     jira_token: str = ""
     port_region: str = "eu"
     blueprint: str

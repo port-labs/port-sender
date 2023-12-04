@@ -23,3 +23,7 @@ Thumbs.db
 .idea
 .vscode
 *.code-workspace
+
+#Pycache
+__pycache__*
+.pyc
