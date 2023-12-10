@@ -2,7 +2,7 @@
 
 # Port Initiatives Sender GitHub Action
 
-[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/devex-community/shared_invite/zt-1bmf5621e-GGfuJdMPK2D8UN58qL4E_g)
+[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/port-community/shared_invite/zt-1x1iys4cn-oihCQp_ropEdIUIcKESImA)
 
 Port is an open internal developer portal. The portal contains valuable data about standards and compliance (in the form of scorecards or initiatives) about software catalog entities, such as the production readiness (scorecard) of a microservice (an entity).
 
