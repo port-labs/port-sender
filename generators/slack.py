@@ -205,7 +205,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     )
                     number_of_entities_didnt_pass_all_rules += 1
 
-        entities_didnt_pass_gold_level_sorted = {
+        entities_didnt_pass_all_rules = {
             level: sorted(entities, key=lambda item: len(item.get("passed_rules", [])), reverse=True)
             for level, entities in entities_didnt_pass_all_rules.items()
         }
@@ -238,7 +238,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "text": {
                         "type": "mrkdwn",
                         "text": self._generate_entities_list_with_level_and_link(blueprint,
-                                                                                 entities_didnt_pass_gold_level_sorted)
+                                                                                 entities_didnt_pass_all_rules)
                     }
                 }
             ]
