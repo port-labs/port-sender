@@ -1,17 +1,9 @@
-import enum
 from typing import Any, Dict, List
 
 import generators.base
 import utils
 from config import settings
 from port.utils import get_port_url
-
-
-class ScorecardLevel(enum.Enum):
-    Gold = 3
-    Silver = 2
-    Bronze = 1
-    Basic = 0
 
 
 class SlackMessageGenerator(generators.base.BaseMessageGenerator):
@@ -191,37 +183,31 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                            scorecard: Dict[str, Any],
                            entities: list) -> List[Dict[str, Any]]:
         blueprint_plural = utils.convert_to_plural(blueprint).title()
-        entities_didnt_pass_highest_scorecard_level = {
+        entities_didnt_pass_all_rules = {
             "Silver": [],
             "Bronze": [],
             "Basic": [],
         }
-        number_of_entities_didnt_pass_highest_level = 0
-
-        highest_scorecard_level: ScorecardLevel = ScorecardLevel.Basic
-        # resolve the highest level that the scorecard has
-        for rule in scorecard.get("rules", []):
-            if ScorecardLevel[rule.get("level")].value > highest_scorecard_level.value:
-                highest_scorecard_level = ScorecardLevel[rule.get("level")]
-
+        number_of_entities_didnt_pass_all_rules = 0
         for entity in entities:
             entity_scorecard_result = entity.get("scorecards", {}).get(scorecard.get("identifier"), {})
             number_of_rules = len(entity_scorecard_result.get("rules", []))
-            if entity_scorecard_result.get("level") != highest_scorecard_level.name:
+            if entity_scorecard_result.get("level") != "Gold":
                 passed_rules = [rule for rule in entity_scorecard_result.get("rules", []) if rule.get("status") == "SUCCESS"] or []
-                entities_didnt_pass_highest_scorecard_level[entity_scorecard_result.get("level")].append(
-                    {
-                        "identifier": entity.get("identifier"),
-                        "name": entity.get("title"),
-                        "passed_rules": passed_rules,
-                        "number_of_rules": number_of_rules
-                    }
-                )
-                number_of_entities_didnt_pass_highest_level += 1
+                if len(passed_rules) < number_of_rules:
+                    entities_didnt_pass_all_rules[entity_scorecard_result.get("level")].append(
+                        {
+                            "identifier": entity.get("identifier"),
+                            "name": entity.get("title"),
+                            "passed_rules": passed_rules,
+                            "number_of_rules": number_of_rules
+                        }
+                    )
+                    number_of_entities_didnt_pass_all_rules += 1
 
-        entities_didnt_pass_highest_scorecard_level = {
+        entities_didnt_pass_gold_level_sorted = {
             level: sorted(entities, key=lambda item: len(item.get("passed_rules", [])), reverse=True)
-            for level, entities in entities_didnt_pass_highest_scorecard_level.items()
+            for level, entities in entities_didnt_pass_all_rules.items()
         }
 
         blocks = [
@@ -244,7 +230,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"*⚠️ {number_of_entities_didnt_pass_highest_level} {blueprint_plural} with unmet rules*"
+                        "text": f"*⚠️ {number_of_entities_didnt_pass_all_rules} {blueprint_plural} with unmet rules*"
                     }
                 },
                 {
@@ -252,7 +238,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     "text": {
                         "type": "mrkdwn",
                         "text": self._generate_entities_list_with_level_and_link(blueprint,
-                                                                                 entities_didnt_pass_highest_scorecard_level)
+                                                                                 entities_didnt_pass_gold_level_sorted)
                     }
                 }
             ]
