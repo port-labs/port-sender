@@ -16,7 +16,6 @@ jobs:
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 blueprint: app
                 scorecard: productionReadiness
-                filter_rule: '{"property": "$team","operator": "containsAny","value": ["AAA"]}'
                 jira_api_endpoint: https://getport.atlassian.net
                 jira_email: matar@getport.io
                 jira_project_id: DEMO
