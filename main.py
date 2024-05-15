@@ -3,11 +3,13 @@ from typing import Dict, Type
 from config import settings
 from core.base_handler import BaseHandler
 from core.jira_handler import JiraHandler
+from core.github_handler import GithubHandler
 from core.slack_handler import SlackHandler
 
 HANDLERS: Dict[str, Type[BaseHandler]] = {
    "jira": JiraHandler,
-   "slack": SlackHandler
+   "slack": SlackHandler,
+   "github": GithubHandler
 }
 
 if __name__ == '__main__':

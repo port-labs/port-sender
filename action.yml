@@ -50,6 +50,21 @@ inputs:
   jira_reopen_transition_id:
     description: 'The Jira transition ID used for reopening issues. If not inserted will use the default transition for the "To Do" status.'
     required: false
+  github_api_url:
+    description: 'The Github API url. For example: https://api.github.com'
+    required: false
+  github_email:
+    description: 'The Github Email.'
+    required: false
+  github_token:
+    description: 'The Github Token'
+    required: false
+  github_owner:
+    description: 'The Github Owner. For example: octo-org'
+    required: false
+  github_repo:
+    description: 'The Github Repository. For example: octo-repo'
+    required: false
   
 runs:
   using: docker

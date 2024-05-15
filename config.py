@@ -14,6 +14,7 @@ class OperationKind(str, Enum):
 class TargetKind(str, Enum):
     slack = "slack"
     jira = "jira"
+    github = "github"
 
 
 class FilterRule(BaseModel):
@@ -25,6 +26,11 @@ class FilterRule(BaseModel):
 class Settings(BaseSettings):
     port_client_id: str
     port_client_secret: str
+    github_api_url: str = ""
+    github_email: str = ""
+    github_token: str = ""
+    github_owner: str = ""
+    github_repo: str = ""
     slack_webhook_url: str = ""
     jira_project_id: str = ""
     jira_api_endpoint: str = "https://jira.com"

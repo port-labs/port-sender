@@ -1,0 +1,24 @@
+name: Sync Github issues based on scorecards
+
+
+on:
+  workflow_dispatch:
+
+jobs:
+    sync-github-issues:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Sync Github Issues
+              uses: port-labs/port-sender@v0.2.4
+              with:
+                operation_kind: ticket_handler
+                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+                port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+                blueprint: app
+                scorecard: productionReadiness
+                github_api_url: https://api.github.com
+                github_email: matang@getport.io
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                github_owner: matang-example-organization
+                github_repo: 
+                target_kind: github
