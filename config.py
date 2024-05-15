@@ -9,6 +9,7 @@ class OperationKind(str, Enum):
     scorecard_reminder = "scorecard_reminder"
     scorecard_report = "scorecard_report"
     ticket_creator = "ticket_handler"
+    issue_handler = "issue_handler"
 
 
 class TargetKind(str, Enum):
@@ -27,7 +28,6 @@ class Settings(BaseSettings):
     port_client_id: str
     port_client_secret: str
     github_api_url: str = ""
-    github_email: str = ""
     github_token: str = ""
     github_owner: str = ""
     github_repo: str = ""

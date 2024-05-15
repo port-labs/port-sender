@@ -3,6 +3,7 @@ import generators.base
 from port.utils import get_port_url
 from config import settings
 
+
 class GithubIssueGenerator(generators.base.BaseIssueGenerator):
     def generate_issue(
         self,
@@ -18,14 +19,9 @@ class GithubIssueGenerator(generators.base.BaseIssueGenerator):
             "title": f"{scorecard_title} tasks to reach the {level} level for the {blueprint}: {entity.get('identifier', '')}",
             "body": f"⭐️ {scorecard_title} tasks for the {blueprint}: {entity_title} \n"
             f"This issue contains all sub-tasks needed to be completed for [{entity_title}](https://app.getport.io/appEntity?identifier={entity.get('identifier')}) to reach the {level} level in the {scorecard_title} scorecard.\n"
-            f"\n:::tip"
-            f"\nScorecards are a way for you and your team to define and track standards, metrics, and KPIs in different categories such as production readiness, quality, productivity, and more."
-            f"\nFor more information about your scorecards, go to [Port]({get_port_url(settings.port_region)})"
-            f"\n:::\n"
-            "\n```[tasklist]"
+            f"\n> :bulb: **Tip:** Scorecards are a way for you and your team to define and track standards, metrics, and KPIs in different categories such as production readiness, quality, productivity, and more. For more information about your scorecards, go to [Port]({get_port_url(settings.port_region)})"
             "\n# Tasks"
-            f"\n{'\n'.join(tasks)}\n",
-            "\n```"
+            "\n" + "\n".join(tasks) + "\n",
             "labels": ["Port", scorecard_title, level],
         }
 

@@ -50,24 +50,45 @@ class GithubHandler(BaseHandler):
                 generated_issue = GithubIssueGenerator().generate_issue(
                     self.scorecard, entity, settings.blueprint, level, tasks
                 )
-                issue_search_result = Github().search_issue_by_labels(generated_issue["labels"])
+                issue_search_result = Github().search_issue_by_labels(
+                    generated_issue["labels"],
+                    settings.github_owner,
+                    settings.github_repo,
+                )
                 issue_search_result
-                issue_exists = issue_search_result > 0
+                issue_exists = len(issue_search_result) > 0
 
                 if not issue_exists:
                     if scorecard_level_completed:
                         continue
-                    Github().create_issue(generated_issue)
+                    Github().create_issue(
+                        generated_issue, settings.github_owner, settings.github_repo
+                    )
                 else:
                     issue = issue_search_result[0]
-                    # TODO: Find how to spot closed issue
-                    if issue["state"]=='closed' and not scorecard_level_completed:
-                        Github().reopen_issue(issue)
+                    issue_number = issue["number"]
+                    if issue["state"] == "closed" and not scorecard_level_completed:
+                        Github().reopen_issue(
+                            issue_number,
+                            issue,
+                            settings.github_owner,
+                            settings.github_repo,
+                        )
+                    Github().update_issue(
+                        issue_number,
+                        generated_issue,
+                        settings.github_owner,
+                        settings.github_repo,
+                    )
 
                 if (
                     scorecard_level_completed
                     and issue_exists
-                    # TODO: Find how to spot open issue
-                    and not issue["fields"]["resolution"]["isClosed"]
+                    and not issue["state"] == "closed"
                 ):
-                    Github().resolve_issue(issue)
+                    Github().resolve_issue(
+                        issue["number"],
+                        issue,
+                        settings.github_owner,
+                        settings.github_repo,
+                    )
