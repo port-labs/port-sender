@@ -17,6 +17,7 @@ jobs:
                 blueprint: app
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["AAA"]}'
+                github_api_url: ${{ github.api_url }} # https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values
                 github_token: ${{ github.token }} # https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values
                 github_repository: ${{ github.repository }} # Example: octocat/Hello-World, https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values
                 target_kind: github

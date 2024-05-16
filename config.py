@@ -27,7 +27,7 @@ class FilterRule(BaseModel):
 class Settings(BaseSettings):
     port_client_id: str
     port_client_secret: str
-    github_api_url: str = "https://api.github.com"
+    github_api_url: str = ""
     github_token: str = ""
     github_repository: str = ""
     slack_webhook_url: str = ""
