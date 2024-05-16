@@ -53,9 +53,6 @@ inputs:
   github_api_url:
     description: 'The Github API url. For example: https://api.github.com'
     required: false
-  github_email:
-    description: 'The Github Email.'
-    required: false
   github_token:
     description: 'The Github Token'
     required: false
