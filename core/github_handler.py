@@ -12,7 +12,19 @@ logger = logging.getLogger(__name__)
 class GithubHandler(BaseHandler):
     def issue_handler(self):
         if not self.entities:
-            logger.info("No entities found")
+            logger.info("No entities found, closing redundant issues")
+            issue_search_result = Github().search_issue_by_labels(
+                ["Port", self.scorecard.get("title", "")],
+                settings.github_organization,
+                settings.github_repo,
+            )
+            for issue in issue_search_result:
+                Github().close_issue(
+                    issue["number"],
+                    issue,
+                    settings.github_organization,
+                    settings.github_repo,
+                )
             return
 
         logger.info("Searching for Github issues to create / update")
@@ -91,7 +103,7 @@ class GithubHandler(BaseHandler):
                     and issue_exists
                     and not issue["state"] == "closed"
                 ):
-                    Github().resolve_issue(
+                    Github().close_issue(
                         issue["number"],
                         generated_issue,
                         settings.github_organization,

@@ -48,11 +48,11 @@ class Github:
         issue_response.raise_for_status()
         return issue_response.json()
 
-    def resolve_issue(
+    def close_issue(
         self, issue_number: int, issue: dict[str, Any], organization: str, repo: str
     ):
         issue["state"] = "closed"
-        logger.info(f"Resolving issue id {issue_number}")
+        logger.info(f"Closing issue id {issue_number}")
         return self.update_issue(issue_number, issue, organization, repo)
 
     def reopen_issue(
