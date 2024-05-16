@@ -59,27 +59,27 @@ class GithubHandler(BaseHandler):
                 issue_exists = len(issue_search_result) > 0
 
                 if not issue_exists:
-                    if scorecard_level_completed:
-                        continue
-                    Github().create_issue(
-                        generated_issue, settings.github_owner, settings.github_repo
-                    )
+                    if not scorecard_level_completed:
+                        Github().create_issue(
+                            generated_issue, settings.github_owner, settings.github_repo
+                        )
                 else:
                     issue = issue_search_result[0]
                     issue_number = issue["number"]
                     if issue["state"] == "closed" and not scorecard_level_completed:
                         Github().reopen_issue(
                             issue_number,
-                            issue,
+                            generated_issue,
                             settings.github_owner,
                             settings.github_repo,
                         )
-                    Github().update_issue(
-                        issue_number,
-                        generated_issue,
-                        settings.github_owner,
-                        settings.github_repo,
-                    )
+                    else:
+                        Github().update_issue(
+                            issue_number,
+                            generated_issue,
+                            settings.github_owner,
+                            settings.github_repo,
+                        )
 
                 if (
                     scorecard_level_completed
@@ -88,7 +88,7 @@ class GithubHandler(BaseHandler):
                 ):
                     Github().resolve_issue(
                         issue["number"],
-                        issue,
+                        generated_issue,
                         settings.github_owner,
                         settings.github_repo,
                     )
