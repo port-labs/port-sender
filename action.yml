@@ -59,8 +59,8 @@ inputs:
   github_token:
     description: 'The Github Token'
     required: false
-  github_owner:
-    description: 'The Github Owner. For example: octo-org'
+  github_organization:
+    description: 'The Github organization/owner. For example: octo-org'
     required: false
   github_repo:
     description: 'The Github Repository. For example: octo-repo'

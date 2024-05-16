@@ -20,13 +20,13 @@ class Github:
         }
 
     def create_issue(
-        self, issue: dict[str, Any], owner: str, repo: str
+        self, issue: dict[str, Any], organization: str, repo: str
     ) -> dict[str, Any]:
         time.sleep(1)  # To avoid rate limits by github's api
-        logger.info(f"Creating new issue at {owner}/{repo}")
+        logger.info(f"Creating new issue at {organization}/{repo}")
         create_issue_response = requests.request(
             "POST",
-            f"{self.api_url}/repos/{owner}/{repo}/issues",
+            f"{self.api_url}/repos/{organization}/{repo}/issues",
             json=issue,
             headers=self.headers,
         )
@@ -35,12 +35,12 @@ class Github:
 
         return create_issue_response.json()
 
-    def search_issue_by_labels(self, labels: list[str], owner: str, repo: str) -> bool:
+    def search_issue_by_labels(self, labels: list[str], organization: str, repo: str) -> bool:
         logger.info(f"Searching issue with labels {labels}")
 
         issue_response = requests.request(
             "GET",
-            f"{self.api_url}/repos/{owner}/{repo}/issues",
+            f"{self.api_url}/repos/{organization}/{repo}/issues",
             headers=self.headers,
             params={"labels": ",".join(labels), "state": "all"},
         )
@@ -49,26 +49,26 @@ class Github:
         return issue_response.json()
 
     def resolve_issue(
-        self, issue_number: int, issue: dict[str, Any], owner: str, repo: str
+        self, issue_number: int, issue: dict[str, Any], organization: str, repo: str
     ):
         issue["state"] = "closed"
         logger.info(f"Resolving issue id {issue_number}")
-        return self.update_issue(issue_number, issue, owner, repo)
+        return self.update_issue(issue_number, issue, organization, repo)
 
     def reopen_issue(
-        self, issue_number: int, issue: dict[str, Any], owner: str, repo: str
+        self, issue_number: int, issue: dict[str, Any], organization: str, repo: str
     ):
         issue["state"] = "open"
         logger.info(f"Reopening issue id {issue_number}")
-        return self.update_issue(issue_number, issue, owner, repo)
+        return self.update_issue(issue_number, issue, organization, repo)
 
     def update_issue(
-        self, issue_number: int, updated_issue: dict[str, Any], owner: str, repo: str
+        self, issue_number: int, updated_issue: dict[str, Any], organization: str, repo: str
     ):
         logger.info(f"Updating issue id {issue_number}")
         issue_response = requests.request(
             "PATCH",
-            f"{self.api_url}/repos/{owner}/{repo}/issues/{issue_number}",
+            f"{self.api_url}/repos/{organization}/{repo}/issues/{issue_number}",
             headers=self.headers,
             data=json.dumps(updated_issue),
         )

@@ -16,9 +16,8 @@ jobs:
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 blueprint: app
                 scorecard: productionReadiness
-                github_api_url: https://api.github.com
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["AAA"]}'
                 github_token: ${{ secrets.GITHUB_TOKEN }}
-                github_owner: example-organization
+                github_organization: example-organization
                 github_repo: example-repo
                 target_kind: github

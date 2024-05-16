@@ -52,7 +52,7 @@ class GithubHandler(BaseHandler):
                 )
                 issue_search_result = Github().search_issue_by_labels(
                     generated_issue["labels"],
-                    settings.github_owner,
+                    settings.github_organization,
                     settings.github_repo,
                 )
                 issue_search_result
@@ -61,7 +61,7 @@ class GithubHandler(BaseHandler):
                 if not issue_exists:
                     if not scorecard_level_completed:
                         Github().create_issue(
-                            generated_issue, settings.github_owner, settings.github_repo
+                            generated_issue, settings.github_organization, settings.github_repo
                         )
                 else:
                     issue = issue_search_result[0]
@@ -70,14 +70,14 @@ class GithubHandler(BaseHandler):
                         Github().reopen_issue(
                             issue_number,
                             generated_issue,
-                            settings.github_owner,
+                            settings.github_organization,
                             settings.github_repo,
                         )
                     else:
                         Github().update_issue(
                             issue_number,
                             generated_issue,
-                            settings.github_owner,
+                            settings.github_organization,
                             settings.github_repo,
                         )
 
@@ -89,6 +89,6 @@ class GithubHandler(BaseHandler):
                     Github().resolve_issue(
                         issue["number"],
                         generated_issue,
-                        settings.github_owner,
+                        settings.github_organization,
                         settings.github_repo,
                     )
