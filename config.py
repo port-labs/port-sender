@@ -29,8 +29,7 @@ class Settings(BaseSettings):
     port_client_secret: str
     github_api_url: str = "https://api.github.com"
     github_token: str = ""
-    github_organization: str = ""
-    github_repo: str = ""
+    github_repository: str = ""
     slack_webhook_url: str = ""
     jira_project_id: str = ""
     jira_api_endpoint: str = "https://jira.com"

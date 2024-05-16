@@ -14,17 +14,10 @@ class GithubHandler(BaseHandler):
         if not self.entities:
             logger.info("No entities found, closing redundant issues")
             issue_search_result = Github().search_issue_by_labels(
-                ["Port", self.scorecard.get("title", "")],
-                settings.github_organization,
-                settings.github_repo,
+                ["Port", self.scorecard.get("title", "")], settings.github_repository
             )
             for issue in issue_search_result:
-                Github().close_issue(
-                    issue["number"],
-                    issue,
-                    settings.github_organization,
-                    settings.github_repo,
-                )
+                Github().close_issue(issue["number"], issue, settings.github_repository)
             return
 
         logger.info("Searching for Github issues to create / update")
@@ -66,9 +59,7 @@ class GithubHandler(BaseHandler):
                     self.scorecard, entity, settings.blueprint, level, tasks
                 )
                 issue_search_result = Github().search_issue_by_labels(
-                    generated_issue["labels"],
-                    settings.github_organization,
-                    settings.github_repo,
+                    generated_issue["labels"], settings.github_repository
                 )
                 issue_search_result
                 issue_exists = len(issue_search_result) > 0
@@ -76,26 +67,18 @@ class GithubHandler(BaseHandler):
                 if not issue_exists:
                     if not scorecard_level_completed:
                         Github().create_issue(
-                            generated_issue,
-                            settings.github_organization,
-                            settings.github_repo,
+                            generated_issue, settings.github_repository
                         )
                 else:
                     issue = issue_search_result[0]
                     issue_number = issue["number"]
                     if issue["state"] == "closed" and not scorecard_level_completed:
                         Github().reopen_issue(
-                            issue_number,
-                            generated_issue,
-                            settings.github_organization,
-                            settings.github_repo,
+                            issue_number, generated_issue, settings.github_repository
                         )
                     else:
                         Github().update_issue(
-                            issue_number,
-                            generated_issue,
-                            settings.github_organization,
-                            settings.github_repo,
+                            issue_number, generated_issue, settings.github_repository
                         )
 
                 if (
@@ -104,8 +87,5 @@ class GithubHandler(BaseHandler):
                     and not issue["state"] == "closed"
                 ):
                     Github().close_issue(
-                        issue["number"],
-                        generated_issue,
-                        settings.github_organization,
-                        settings.github_repo,
+                        issue["number"], generated_issue, settings.github_repository
                     )
