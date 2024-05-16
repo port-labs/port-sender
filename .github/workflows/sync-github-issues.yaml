@@ -18,6 +18,6 @@ jobs:
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["AAA"]}'
                 github_token: ${{ secrets.GITHUB_TOKEN }}
-                github_organization: example-organization
-                github_repo: example-repo
+                github_organization: example-org # From your repo's url: https://github.com/<example-org>/<example-repo>
+                github_repo: example-repo # From your repo's url: https://github.com/<example-org>/<example-repo>
                 target_kind: github
