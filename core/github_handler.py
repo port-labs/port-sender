@@ -21,11 +21,14 @@ class GithubHandler(BaseHandler):
             entity_scorecard = entity.get("scorecards", {}).get(
                 self.scorecard.get("identifier"), {}
             )
-            rules_by_level = {"Gold": [], "Silver": [], "Bronze": []}
+            rules_by_level = {}
 
             # Grouping rules by levels
             for rule in entity_scorecard.get("rules", []):
-                rules_by_level[rule.get("level")].append(rule)
+                level = rule.get("level")
+                if level not in rules_by_level.keys():
+                    rules_by_level[level] = []
+                rules_by_level[level].append(rule)
 
             for level in rules_by_level:
                 scorecard_level_completed = all(
@@ -61,7 +64,9 @@ class GithubHandler(BaseHandler):
                 if not issue_exists:
                     if not scorecard_level_completed:
                         Github().create_issue(
-                            generated_issue, settings.github_organization, settings.github_repo
+                            generated_issue,
+                            settings.github_organization,
+                            settings.github_repo,
                         )
                 else:
                     issue = issue_search_result[0]
