@@ -11,15 +11,18 @@ logger = logging.getLogger(__name__)
 
 class GithubHandler(BaseHandler):
     def issue_handler(self):
+        logger.info("Started syncing scorecard statuses as issues for Github")
         if not self.entities:
             logger.info("No entities found, looking for left over open issues")
             issue_search_result = Github().search_issue_by_labels(
-                ["Port", self.scorecard.get("title", "")], settings.github_repository, state="open"
+                ["Port", self.scorecard.get("title", "")],
+                settings.github_repository,
+                state="open",
             )
             if len(issue_search_result) > 0:
-                logger.info("no open issues found")
+                logger.info("No open issues found")
             else:
-                logger.info(f"found {len(issue_search_result)} open issues")
+                logger.info(f"Found {len(issue_search_result)} open issues")
                 for issue in issue_search_result:
                     Github().close_issue(
                         issue["number"], issue, settings.github_repository
@@ -95,3 +98,4 @@ class GithubHandler(BaseHandler):
                     Github().close_issue(
                         issue["number"], generated_issue, settings.github_repository
                     )
+        logger.info("Done syncing scorecard statuses as issues for Github")
