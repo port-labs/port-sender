@@ -19,9 +19,7 @@ class Github:
             "X-GitHub-Api-Version": "2022-11-28",
         }
 
-    def create_issue(
-        self, issue: dict[str, Any],  repository: str
-    ) -> dict[str, Any]:
+    def create_issue(self, issue: dict[str, Any], repository: str) -> dict[str, Any]:
         time.sleep(1)  # To avoid rate limits by github's api
         logger.info(f"Creating new issue at {repository}")
         create_issue_response = requests.request(
@@ -35,35 +33,33 @@ class Github:
 
         return create_issue_response.json()
 
-    def search_issue_by_labels(self, labels: list[str],  repository: str) -> bool:
+    def search_issue_by_labels(
+        self, labels: list[str], repository: str, state: str = "all"
+    ) -> bool:
         logger.info(f"Searching issue with labels {labels}")
 
         issue_response = requests.request(
             "GET",
             f"{self.api_url}/repos/{repository}/issues",
             headers=self.headers,
-            params={"labels": ",".join(labels), "state": "all"},
+            params={"labels": ",".join(labels), "state": state},
         )
 
         issue_response.raise_for_status()
         return issue_response.json()
 
-    def close_issue(
-        self, issue_number: int, issue: dict[str, Any],  repository: str
-    ):
+    def close_issue(self, issue_number: int, issue: dict[str, Any], repository: str):
         issue["state"] = "closed"
         logger.info(f"Closing issue id {issue_number}")
         return self.update_issue(issue_number, issue, repository)
 
-    def reopen_issue(
-        self, issue_number: int, issue: dict[str, Any],  repository: str
-    ):
+    def reopen_issue(self, issue_number: int, issue: dict[str, Any], repository: str):
         issue["state"] = "open"
         logger.info(f"Reopening issue id {issue_number}")
         return self.update_issue(issue_number, issue, repository)
 
     def update_issue(
-        self, issue_number: int, updated_issue: dict[str, Any],  repository: str
+        self, issue_number: int, updated_issue: dict[str, Any], repository: str
     ):
         logger.info(f"Updating issue id {issue_number}")
         issue_response = requests.request(
