@@ -12,12 +12,18 @@ logger = logging.getLogger(__name__)
 class GithubHandler(BaseHandler):
     def issue_handler(self):
         if not self.entities:
-            logger.info("No entities found, closing redundant issues")
+            logger.info("No entities found, looking for left over open issues")
             issue_search_result = Github().search_issue_by_labels(
-                ["Port", self.scorecard.get("title", "")], settings.github_repository
+                ["Port", self.scorecard.get("title", "")], settings.github_repository, state="open"
             )
-            for issue in issue_search_result:
-                Github().close_issue(issue["number"], issue, settings.github_repository)
+            if len(issue_search_result) > 0:
+                logger.info("no open issues found")
+            else:
+                logger.info(f"found {len(issue_search_result)} open issues")
+                for issue in issue_search_result:
+                    Github().close_issue(
+                        issue["number"], issue, settings.github_repository
+                    )
             return
 
         logger.info("Searching for Github issues to create / update")
