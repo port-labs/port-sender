@@ -267,7 +267,7 @@ jobs:
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
                 github_api_url: ${{ github.api_url }}
-                github_token: ${{ secrets.MY_SECRET }}
+                github_token: ${{ github.token }}
                 github_repository: ${{ github.repository }}
                 target_kind: github
 
