@@ -253,6 +253,8 @@ on:
 
 jobs:
     sync-github-issues:
+        permissions:
+          issues: write
         runs-on: ubuntu-latest
         steps:
             - name: Sync Github Issues
