@@ -22,7 +22,7 @@ class Github:
         }
 
     def create_issue(self, issue: dict[str, Any], repository: str) -> dict[str, Any]:
-        time.sleep(1)  # To avoid rate limits by github's api
+        time.sleep(1)  # https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#pause-between-mutative-requests
         logger.info(f"Creating new issue at {repository}")
         create_issue_response = self._send_request(
             "POST",
@@ -61,6 +61,7 @@ class Github:
     def update_issue(
         self, issue_number: int, updated_issue: dict[str, Any], repository: str
     ):
+        time.sleep(1)  # https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#pause-between-mutative-requests
         logger.info(f"Updating issue id {issue_number}")
         issue_response = self._send_request(
             "PATCH",
