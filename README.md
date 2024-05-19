@@ -170,7 +170,7 @@ Once the scorecard is completed, the tasks and subtasks will be resolved (passed
 
 You can modify the schedule to run the reminder on a daily/weekly/monthly basis. For more information about scheduling, refer to the [GitHub Actions documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
 
-You can also modify the filter rule to filter the services, ideally you would want to filter by team, so that each team will get a reminder about their services.
+You can also modify the filter rule to filter the services, ideally you would want to filter by team, so that each team will have relevant tasks about their services.
 
 ```yaml
 name: Sync Jira Issues with Scorecard Initiatives
@@ -235,12 +235,12 @@ Generated Scorecard issue for the bronze level:
 | `github_token`          | The Github's Token used for create/get/update operations on issues. We recommend using [Github's context variables](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)                                                                                                                                                                          | true     |         |
 
 This example will create a Github issue for every service in every level that are not completed in the `productionReadiness` scorecard for the Backend Team.
-For every rule in the scorecard, both complete or incomplete, a task will be added to the issue's task list (will be marked as done if rule is fulfilled, open otherwise).
+For each scorecard level that an entity fails to complete, a GitHub Issue will be generated. This issue will include a task list covering all the level's rules, both completed and incomplete.
 Once the scorecard is completed, the issues and tasks in the task list will be resolved (the issue state will change to `closed`).  
 
 You can modify the schedule to run the reminder on a daily/weekly/monthly basis. For more information about scheduling, refer to the [GitHub Actions documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
 
-You can also modify the filter rule to filter the services, ideally you would want to filter by team, so that each team will get a reminder about their services.
+You can also modify the filter rule to filter the services, ideally you would want to filter by team, so that each team will have relevant issues about their services.
 
 ```yaml
 name: Sync Github Issues with Scorecard Initiatives
