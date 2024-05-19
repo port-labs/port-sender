@@ -235,7 +235,7 @@ Generated Scorecard issue for the bronze level:
 | `github_token`          | The Github's Token used for create/get/update operations on issues. We recommend using [Github's context variables](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)                                                                                                                                                                          | true     |         |
 
 This example will create a Github issue for every service in every level that are not completed in the `productionReadiness` scorecard for the Backend Team.
-For every scorecard level that an entity didn’t complete, a Github Issue will be created and a task list will be created for the level rules (both complete and incomplete).
+For each scorecard level that an entity fails to complete, a GitHub Issue will be generated. This issue will include a task list covering all the level's rules, both completed and incomplete.
 Once the scorecard is completed, the issues and tasks in the task list will be resolved (the issue state will change to `closed`).  
 
 You can modify the schedule to run the reminder on a daily/weekly/monthly basis. For more information about scheduling, refer to the [GitHub Actions documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
