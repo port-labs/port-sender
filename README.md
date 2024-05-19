@@ -204,3 +204,73 @@ jobs:
 ```
 
 You can find more examples in the [examples folder](docs/examples/)
+
+
+## Manage scorecards with Github issues 
+
+A call to action to sync Github issues (create/reopen/close) with scorecards and rules.
+
+For every scorecard level that is not completed in an entity, a Github Issue will be created and a task list will be created for the level rules (both complete and incomplete).
+
+### Output example
+
+Generated Scorecard issue for the bronze level:
+ ![Jira Task](docs/assets/github-sync-issue.png)
+
+
+
+### Usage
+
+| Input                        | Description                                                                                                                                                                                              | Required | Default |
+|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------|
+| `port_client_id`             | Port Client ID                                                                                                                                                                                           | true     |         |
+| `port_client_secret`         | Port Client Secret                                                                                                                                                                                       | true     |         |
+| `port_region`                | Port Region to use, if not provided will use the default region of Port                                                                                                                                  | false    | eu        |
+| `blueprint`                  | Blueprint identifier                                                                                                                                                                                     | true     |         |
+| `scorecard`                  | Scorecard identifier                                                                                                                                                                                     | true     |         |
+| `opeation_kind`              | What operation should the sender do, leave at - `issue_handler`                                                                                                                            | true     |         |
+| `filter_rule`                | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
+| `github_api_url`          | Github API URL. We recommend using [Github's context variables](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)   URL                                                                                                                                                                                        | true     |         |
+| `github_repository`            | The Github Repository. For example: octo-org/octo-repo. We recommend using [Github's context variables](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)                                                   | true     |         |
+| `github_token`          | The Github's Token used for create/get/update operations on issues. We recommend using [Github's context variables](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)                                                                                                                                                                          | true     |         |
+
+This example will create a Github issue for every service in every level that are not completed in the `productionReadiness` scorecard for the Backend Team.
+For every rule in the scorecard, both complete or incomplete, a task will be added to the issue's task list (will be marked as done if rule is fulfilled, open otherwise).
+Once the scorecard is completed, the issues and tasks in the task list will be resolved (the issue state will change to `closed`).  
+
+You can modify the schedule to run the reminder on a daily/weekly/monthly basis. For more information about scheduling, refer to the [GitHub Actions documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule).
+
+You can also modify the filter rule to filter the services, ideally you would want to filter by team, so that each team will get a reminder about their services.
+
+```yaml
+name: Sync Github Issues with Scorecard Initiatives
+
+on:
+  schedule:
+    ## run every day at 9am
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+    sync-github-issues:
+        permissions:
+          issues: write
+        runs-on: ubuntu-latest
+        steps:
+            - name: Sync Github Issues
+              uses: port-labs/port-sender@v0.2.5
+              with:
+                operation_kind: issue_handler
+                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+                port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+                blueprint: app
+                scorecard: productionReadiness
+                filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
+                github_api_url: ${{ github.api_url }}
+                github_token: ${{ secrets.MY_SECRET }}
+                github_repository: ${{ github.repository }}
+                target_kind: github
+
+```
+
+You can find more examples in the [examples folder](docs/examples/)

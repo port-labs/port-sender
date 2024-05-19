@@ -1,0 +1,25 @@
+name: Sync Github issues based on scorecards
+
+
+on:
+  workflow_dispatch:
+
+jobs:
+    sync-github-issues:
+        permissions:
+          issues: write
+        runs-on: ubuntu-latest
+        steps:
+            - name: Sync Github Issues
+              uses: port-labs/port-sender@v0.2.4
+              with:
+                operation_kind: issue_handler
+                port_client_id: ${{ secrets.PORT_CLIENT_ID }}
+                port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
+                blueprint: app
+                scorecard: productionReadiness
+                filter_rule: '{"property": "$team","operator": "containsAny","value": ["AAA"]}'
+                github_api_url: ${{ github.api_url }} # https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values
+                github_token: ${{ github.token }} # https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values
+                github_repository: ${{ github.repository }} # Example: octocat/Hello-World, https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values
+                target_kind: github

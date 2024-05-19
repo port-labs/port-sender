@@ -1,6 +1,14 @@
 import abc
 from typing import Any, Dict
 
+class BaseIssueGenerator(abc.ABC):
+    @abc.abstractmethod
+    def generate_issue(self, scorecard: Dict[str, Any], entity: Dict[str, Any], blueprint: str, level: str, tasks: list[str]):
+        pass
+
+    @abc.abstractmethod
+    def generate_task(self, rule: Dict[str, Any]) -> str:
+        pass
 
 class BaseMessageGenerator(abc.ABC):
     @abc.abstractmethod
