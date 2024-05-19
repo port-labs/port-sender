@@ -33,8 +33,17 @@ class Github:
 
         return create_issue_response.json()
 
-    def search_issue_by_labels(
+    def search_all_issues_by_labels(
         self, labels: list[str], repository: str, state: str = "all"
+    ):
+        return self.search_issue_by_labels(
+            labels=labels,
+            repository=repository,
+            params={"labels": ",".join(labels), "state": state},
+        )
+
+    def search_issue_by_labels(
+        self, labels: list[str], repository: str, params: dict[str, str]
     ) -> bool:
         logger.info(f"Searching issue with labels {labels}")
 
@@ -42,7 +51,7 @@ class Github:
             "GET",
             f"{self.api_url}/repos/{repository}/issues",
             headers=self.headers,
-            params={"labels": ",".join(labels), "state": state},
+            params=params,
         )
 
         issue_response.raise_for_status()
