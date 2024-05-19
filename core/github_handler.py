@@ -15,7 +15,7 @@ class GithubHandler(BaseHandler):
         if not self.entities:
             logger.info("No entities found, looking for left over open issues")
             issue_search_result = Github().search_issue_by_labels(
-                ["Port", self.scorecard.get("title", "")],
+                ["Port", self.scorecard.get("title", ""), settings.blueprint],
                 settings.github_repository,
                 state="open",
             )
