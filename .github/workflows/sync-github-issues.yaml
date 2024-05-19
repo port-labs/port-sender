@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Sync Github Issues
-              uses: port-labs/port-sender@v0.2.5
+              uses: port-labs/port-sender@v0.2.6
               with:
                 operation_kind: issue_handler
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
