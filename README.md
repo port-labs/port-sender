@@ -18,14 +18,14 @@ This action will allow you to automatically send reports and reminders with rega
 
 ### Port
 
-Find your Port credentials
+Find your Port credentials  
 To find your Port API credentials go to Port, hover on the 3 dots button at the top right corner, select Credentials and then you will be able to view and copy your `CLIENT_ID` and `CLIENT_SECRET`:
 
 ![Port Credentials](docs/assets/credentials-modal.png)
 
 ### Slack
 
-Setting up a slack webhook
+Setting up a slack webhook  
 Head to your [Slack apps](https://api.slack.com/apps) page and create a new app (or select one of your existing apps). Then, go to the Incoming Webhooks page and create a new webhook, specifying the target channel on your server where messages that are sent to the slack webhook will be transferred.
 
 Copy the webhook URL, you will use it soon to set up your GitHub action.
@@ -72,7 +72,7 @@ jobs:
             - name: Generate Scorecard Report
               uses: port-labs/port-sender@v0.2.4
               with:
-                message_kind: scorecard_report
+                operation_kind: scorecard_report
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -123,7 +123,7 @@ jobs:
             - name: Generate Scorecards Reminders
               uses: port-labs/port-sender@v0.2.4
               with:
-                message_kind: scorecard_reminder
+                operation_kind: scorecard_reminder
                 port_client_id: ${{ secrets.PORT_CLIENT_ID }}
                 port_client_secret: ${{ secrets.PORT_CLIENT_SECRET }}
                 slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
