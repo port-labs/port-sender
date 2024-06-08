@@ -86,6 +86,7 @@ class JiraHandler(BaseHandler):
                         elif not rule_successful and subtask["fields"]["resolution"]:
                             Jira().reopen_issue(subtask)
                     elif not rule_successful:
+                        logger.info(f"Creating subtask for {rule.get('title')} in {parent_key} for {entity.get('name')}")
                         Jira().create_issue(generated_subtask)
 
                 if (scorecard_level_completed and
