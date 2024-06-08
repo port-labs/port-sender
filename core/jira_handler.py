@@ -5,7 +5,6 @@ from core.base_handler import BaseHandler
 from generators.jira import JiraIssueGenerator
 from targets.jira import Jira
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

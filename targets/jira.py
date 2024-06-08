@@ -8,7 +8,6 @@ from requests.auth import HTTPBasicAuth
 
 from config import settings
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

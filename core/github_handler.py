@@ -5,7 +5,6 @@ from core.base_handler import BaseHandler
 from generators.github import GithubIssueGenerator
 from targets.github import Github
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
