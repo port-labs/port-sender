@@ -3,7 +3,6 @@ import logging
 from config import settings
 from port.client import PortClient
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     filter_rule: Union[FilterRule, str, None] = Field(default=None)
     operation_kind: OperationKind = OperationKind.scorecard_reminder
     target_kind: TargetKind = TargetKind.slack
+    log_level: str = "INFO"
 
     class Config:
         env_prefix = "INPUT_"

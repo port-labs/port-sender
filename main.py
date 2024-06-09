@@ -1,4 +1,5 @@
 from typing import Dict, Type
+import logging
 
 from config import settings
 from core.base_handler import BaseHandler
@@ -7,10 +8,20 @@ from core.github_handler import GithubHandler
 from core.slack_handler import SlackHandler
 
 HANDLERS: Dict[str, Type[BaseHandler]] = {
-   "jira": JiraHandler,
-   "slack": SlackHandler,
-   "github": GithubHandler
+    "jira": JiraHandler,
+    "slack": SlackHandler,
+    "github": GithubHandler
 }
+
+if len(logging.getLogger().handlers) > 0:
+    # The Lambda environment pre-configures a handler logging to stderr.
+    # If a handler is already configured, `.basicConfig` does not execute.
+    # Thus we set the level directly.
+    # https://stackoverflow.com/a/56579088
+    logging.getLogger().setLevel(settings.log_level)
+else:
+    logging.basicConfig(level=settings.log_level)
+logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     operation_kind = settings.operation_kind

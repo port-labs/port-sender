@@ -8,7 +8,6 @@ from requests.auth import HTTPBasicAuth
 
 from config import settings
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -30,7 +29,7 @@ class Jira:
 
     def create_issue(self, params: dict[str, Any]) -> dict[str, Any]:
         logger.info(f"Creating new issue: {params['fields']['summary']}")
-
+        logger.debug(f"Creating new issue with params: {params}")
         create_issue_response = requests.request(
             "POST", f"{self.api_url}/issue", json=params, headers=self.headers
         )

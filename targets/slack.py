@@ -5,7 +5,6 @@ from slack_sdk.webhook import WebhookClient
 
 from config import settings
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

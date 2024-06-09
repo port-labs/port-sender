@@ -5,7 +5,6 @@ import time
 import requests
 from config import settings
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 REQUESTS_BACKOFF_FACTOR = 60

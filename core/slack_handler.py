@@ -5,7 +5,6 @@ from core.base_handler import BaseHandler
 from generators.slack import SlackMessageGenerator
 from targets.slack import Slack
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
