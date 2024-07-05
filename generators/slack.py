@@ -7,6 +7,9 @@ from port.utils import get_port_url
 
 
 class SlackMessageGenerator(generators.base.BaseMessageGenerator):
+    # Slack has a limit of 3001 characters per message block
+    # We will use this constant to split the message blocks into smaller ones
+    SCORECARD_ENTITIES_BATCH_SIZE = 20
 
     def scorecard_report(self, blueprint: str, scorecard: Dict[str, Any], entities: list):
         blueprint_plural = utils.convert_to_plural(blueprint).title()
@@ -233,14 +236,10 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                         "text": f"*⚠️ {number_of_entities_didnt_pass_all_rules} {blueprint_plural} with unmet rules*"
                     }
                 },
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": self._generate_entities_list_with_level_and_link(blueprint,
-                                                                                 entities_didnt_pass_all_rules)
-                    }
-                }
+                *self._generate_entities_list_with_level_and_link(
+                    blueprint,
+                    entities_didnt_pass_all_rules
+                )
             ]
         return blocks
 
@@ -301,18 +300,53 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             for team, _ in sorted(entities_by_team.items(), key=lambda item: item[1], reverse=True)[:3]
         ]
         return top_3_teams_by_percentage
-
+    
     @staticmethod
-    def _generate_entities_list_with_level_and_link(blueprint: str,
-                                                    entities_by_level: Dict[str, List[Dict[str, str]]]) -> str:
-        text = ""
-        base_entity_url = f"{get_port_url(settings.port_region, 'app')}/{blueprint}Entity?identifier="
+    def _generate_entities_list_with_level_and_link(
+        blueprint: str,
+        entities_by_level: Dict[str, List[Dict[str, str]]]
+    ) -> list[dict[str, str]]:
+        """
+        Generates message block for Slack with entities grouped by level,
+        being aware of the 3001 message limit for Slack blocks.
+        """
+        block = []
         for level, entities in entities_by_level.items():
             if not entities:
                 continue
 
-            text += f"\n*{level}*\n\n"
-            for entity in entities:
-                text += f"• <{base_entity_url}{entity.get('identifier')}|{entity.get('name')}>" \
-                        f" - `[{len(entity.get('passed_rules'))}/{entity.get('number_of_rules')}] Passed` \n"
-        return text
+            batched_entities = utils.batch_items(
+                entities,
+                SlackMessageGenerator.SCORECARD_ENTITIES_BATCH_SIZE
+            )
+            for index, batch in enumerate(batched_entities):
+                prefix = f"*{level}*\n\n" if index == 0 else ""
+                block.append(
+                    SlackMessageGenerator._generate_block_for_entities(batch, blueprint, prefix)
+                )
+
+        return block
+    
+    @staticmethod
+    def _generate_block_for_entities(entities: List[Dict[str, str]], blueprint: str, prefix: str = "") -> Dict[str, Any]:
+        return {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": (
+                    prefix +
+                    " \n".join(
+                        SlackMessageGenerator._generate_text_for_entity(blueprint, entity)
+                        for entity in entities
+                    )
+                )
+            }
+        }
+    
+    @staticmethod
+    def _generate_text_for_entity(blueprint: str, entity: Dict[str, str]) -> str:
+        base_entity_url = f"{get_port_url(settings.port_region, 'app')}/{blueprint}Entity?identifier="
+        return (
+            f"• <{base_entity_url}{entity.get('identifier')}|{entity.get('name')}>"
+            f" - `[{len(entity.get('passed_rules'))}/{entity.get('number_of_rules')}] Passed`"
+        )
