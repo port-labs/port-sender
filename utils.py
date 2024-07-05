@@ -9,6 +9,7 @@ def convert_to_plural(word: str):
     plural_word = p.plural(word)
     return plural_word
 
+
 def batch_items(items: list[Any], batch_size: int):
     """
     Breaks the given list of items into batched lists with a preset length.
@@ -22,5 +23,5 @@ def batch_items(items: list[Any], batch_size: int):
 
     it = iter(items)
     batched_list = list(iter(lambda: list(itertools.islice(it, batch_size)), []))
-    
+
     return batched_list
