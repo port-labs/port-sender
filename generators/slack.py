@@ -9,6 +9,7 @@ from port.utils import get_port_url
 class SlackMessageGenerator(generators.base.BaseMessageGenerator):
     # Slack has a limit of 3001 characters per message block
     # We will use this constant to split the message blocks into smaller ones
+    SLACK_MAX_MESSAGE_BLOCK_SIZE = 3000
     SCORECARD_ENTITIES_BATCH_SIZE = 20
 
     def scorecard_report(self, blueprint: str, scorecard: Dict[str, Any], entities: list):
@@ -314,17 +315,43 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         for level, entities in entities_by_level.items():
             if not entities:
                 continue
+            
+            batch_count = 0
+            current_count = 0
+            current_entities = []
 
-            batched_entities = utils.batch_items(
-                entities,
-                SlackMessageGenerator.SCORECARD_ENTITIES_BATCH_SIZE
-            )
-            for index, batch in enumerate(batched_entities):
-                prefix = f"*{level}*\n\n" if index == 0 else ""
+            while current_count < len(entities):
+                text_length = 0
+                entities_text = ""
+                while text_length < SlackMessageGenerator.SLACK_MAX_MESSAGE_BLOCK_SIZE and current_count < len(entities):
+                    current_entities.append(entities[current_count])
+                    entities_text = " \n".join(
+                        SlackMessageGenerator._generate_text_for_entity(blueprint, entity)
+                        for entity in current_entities
+                    )
+                    text_length = len(entities_text)
+                    current_count += 1
+
+                if current_count == len(entities):
+                    block.append(
+                        SlackMessageGenerator._generate_block_for_entities(
+                            current_entities,
+                            blueprint,
+                            f"*{level}*\n\n" if batch_count == 0 else ""
+                        )
+                    )
+                    break
+                current_entities.pop()
+                current_count -= 1
                 block.append(
-                    SlackMessageGenerator._generate_block_for_entities(batch, blueprint, prefix)
+                    SlackMessageGenerator._generate_block_for_entities(
+                        current_entities,
+                        blueprint,
+                        f"*{level}*\n\n" if batch_count == 0 else ""
+                    )
                 )
-
+                current_entities = []
+                batch_count += 1
         return block
     
     @staticmethod
