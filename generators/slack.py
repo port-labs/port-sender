@@ -285,7 +285,11 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             if not matched:
                 filtered_top_lowest_scored_rules_by_percentage.append((lowest_rule, value))
 
-        return top_3_highest_scored_rules_by_percentage, filtered_top_lowest_scored_rules_by_percentage
+        return (
+            top_3_highest_scored_rules_by_percentage,
+            filtered_top_lowest_scored_rules_by_percentage
+        )
+
 
     @staticmethod
     def _calculate_top_teams_by_percentage(entities: list,
@@ -301,7 +305,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             for team, _ in sorted(entities_by_team.items(), key=lambda item: item[1], reverse=True)[:3]
         ]
         return top_3_teams_by_percentage
-    
+
     @staticmethod
     def _generate_entities_list_with_level_and_link(
         blueprint: str,
