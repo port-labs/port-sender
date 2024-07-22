@@ -323,7 +323,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             
             # we must account for the length of the level title
             # in the max size of a slack message block
-            MAX_MESSAGE_BLOCK_SIZE_FOR_TITLE = (
+            max_message_block_size_for_entities = (
                 SlackMessageGenerator.SLACK_MAX_MESSAGE_BLOCK_SIZE
                 - len(level_title)
             )
@@ -341,7 +341,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                 text_length = 0
                 entities_text = ""
                 while text_length < (
-                    MAX_MESSAGE_BLOCK_SIZE_FOR_TITLE
+                    max_message_block_size_for_entities
                 ) and current_count < len(entities):
                     current_entities.append(entities[current_count])
                     entities_text = " \n".join(
