@@ -319,14 +319,30 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             if not entities:
                 continue
             
+            level_title = f"*{level}*\n\n"
+            
+            # we must account for the length of the level title
+            # in the max size of a slack message block
+            MAX_MESSAGE_BLOCK_SIZE_FOR_TITLE = (
+                SlackMessageGenerator.SLACK_MAX_MESSAGE_BLOCK_SIZE
+                - len(level_title)
+            )
+            # let's us know if this is the first batch of entities
+            # which will contain the title of the level
             batch_count = 0
             current_count = 0
+            # the entities that will be written to slack at this current
+            # iteration
             current_entities = []
 
             while current_count < len(entities):
+                # we will keep adding entities to the current_entities list
+                # until we reach the max size of a slack message block
                 text_length = 0
                 entities_text = ""
-                while text_length < SlackMessageGenerator.SLACK_MAX_MESSAGE_BLOCK_SIZE and current_count < len(entities):
+                while text_length < (
+                    MAX_MESSAGE_BLOCK_SIZE_FOR_TITLE
+                ) and current_count < len(entities):
                     current_entities.append(entities[current_count])
                     entities_text = " \n".join(
                         SlackMessageGenerator._generate_text_for_entity(blueprint, entity)
@@ -335,22 +351,31 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                     text_length = len(entities_text)
                     current_count += 1
 
+                # if we reach the end of the entities list,
+                # we will generate the block
                 if current_count == len(entities):
                     block.append(
                         SlackMessageGenerator._generate_block_for_entities(
                             current_entities,
                             blueprint,
-                            f"*{level}*\n\n" if batch_count == 0 else ""
+                            level_title if batch_count == 0 else ""
                         )
                     )
                     break
+
+                # the only way we can reach this point is if the current_entities
+                # list is above the max size of a slack message block
+                # if we simply make the request, the API call will fail
+                # therefore, we will remove the last entity from the list
+                # to stay within the limit.
                 current_entities.pop()
+                # update the current count to reflect the removal of the last entity
                 current_count -= 1
                 block.append(
                     SlackMessageGenerator._generate_block_for_entities(
                         current_entities,
                         blueprint,
-                        f"*{level}*\n\n" if batch_count == 0 else ""
+                        level_title if batch_count == 0 else ""
                     )
                 )
                 current_entities = []

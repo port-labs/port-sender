@@ -1,6 +1,3 @@
-import itertools
-from typing import Any
-
 import inflect
 
 
