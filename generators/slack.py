@@ -7,6 +7,9 @@ from port.utils import get_port_url
 
 
 class SlackMessageGenerator(generators.base.BaseMessageGenerator):
+    # Slack has a limit of 3001 characters per message block
+    # We will use this constant to split the message blocks into smaller ones
+    SLACK_MAX_MESSAGE_BLOCK_SIZE = 3000
 
     def scorecard_report(self, blueprint: str, scorecard: Dict[str, Any], entities: list):
         blueprint_plural = utils.convert_to_plural(blueprint).title()
@@ -233,14 +236,10 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                         "text": f"*⚠️ {number_of_entities_didnt_pass_all_rules} {blueprint_plural} with unmet rules*"
                     }
                 },
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": self._generate_entities_list_with_level_and_link(blueprint,
-                                                                                 entities_didnt_pass_all_rules)
-                    }
-                }
+                *self._generate_entities_list_with_level_and_link(
+                    blueprint,
+                    entities_didnt_pass_all_rules
+                )
             ]
         return blocks
 
@@ -285,7 +284,11 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             if not matched:
                 filtered_top_lowest_scored_rules_by_percentage.append((lowest_rule, value))
 
-        return top_3_highest_scored_rules_by_percentage, filtered_top_lowest_scored_rules_by_percentage
+        return (
+            top_3_highest_scored_rules_by_percentage,
+            filtered_top_lowest_scored_rules_by_percentage
+        )
+
 
     @staticmethod
     def _calculate_top_teams_by_percentage(entities: list,
@@ -303,16 +306,102 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         return top_3_teams_by_percentage
 
     @staticmethod
-    def _generate_entities_list_with_level_and_link(blueprint: str,
-                                                    entities_by_level: Dict[str, List[Dict[str, str]]]) -> str:
-        text = ""
-        base_entity_url = f"{get_port_url(settings.port_region, 'app')}/{blueprint}Entity?identifier="
+    def _generate_entities_list_with_level_and_link(
+        blueprint: str,
+        entities_by_level: Dict[str, List[Dict[str, str]]]
+    ) -> list[dict[str, str]]:
+        """
+        Generates message block for Slack with entities grouped by level,
+        being aware of the 3001 message limit for Slack blocks.
+        """
+        block = []
         for level, entities in entities_by_level.items():
             if not entities:
                 continue
+            
+            level_title = f"*{level}*\n\n"
+            
+            # we must account for the length of the level title
+            # in the max size of a slack message block
+            max_message_block_size_for_entities = (
+                SlackMessageGenerator.SLACK_MAX_MESSAGE_BLOCK_SIZE
+                - len(level_title)
+            )
+            # let's us know if this is the first batch of entities
+            # which will contain the title of the level
+            batch_count = 0
+            current_count = 0
+            # the entities that will be written to slack at this current
+            # iteration
+            current_entities = []
 
-            text += f"\n*{level}*\n\n"
-            for entity in entities:
-                text += f"• <{base_entity_url}{entity.get('identifier')}|{entity.get('name')}>" \
-                        f" - `[{len(entity.get('passed_rules'))}/{entity.get('number_of_rules')}] Passed` \n"
-        return text
+            while current_count < len(entities):
+                # we will keep adding entities to the current_entities list
+                # until we reach the max size of a slack message block
+                text_length = 0
+                entities_text = ""
+                while text_length < (
+                    max_message_block_size_for_entities
+                ) and current_count < len(entities):
+                    current_entities.append(entities[current_count])
+                    entities_text = " \n".join(
+                        SlackMessageGenerator._generate_text_for_entity(blueprint, entity)
+                        for entity in current_entities
+                    )
+                    text_length = len(entities_text)
+                    current_count += 1
+
+                # if we reach the end of the entities list,
+                # we will generate the block
+                if current_count == len(entities):
+                    block.append(
+                        SlackMessageGenerator._generate_block_for_entities(
+                            current_entities,
+                            blueprint,
+                            level_title if batch_count == 0 else ""
+                        )
+                    )
+                    break
+
+                # the only way we can reach this point is if the current_entities
+                # list is above the max size of a slack message block
+                # if we simply make the request, the API call will fail
+                # therefore, we will remove the last entity from the list
+                # to stay within the limit.
+                current_entities.pop()
+                # update the current count to reflect the removal of the last entity
+                current_count -= 1
+                block.append(
+                    SlackMessageGenerator._generate_block_for_entities(
+                        current_entities,
+                        blueprint,
+                        level_title if batch_count == 0 else ""
+                    )
+                )
+                current_entities = []
+                batch_count += 1
+        return block
+    
+    @staticmethod
+    def _generate_block_for_entities(entities: List[Dict[str, str]], blueprint: str, prefix: str = "") -> Dict[str, Any]:
+        return {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": (
+                    prefix +
+                    " \n".join(
+                        SlackMessageGenerator._generate_text_for_entity(blueprint, entity)
+                        for entity in entities
+                    )
+                )
+            }
+        }
+    
+    @staticmethod
+    def _generate_text_for_entity(blueprint: str, entity: Dict[str, str]) -> str:
+        base_entity_url = f"{get_port_url(settings.port_region, 'app')}/{blueprint}Entity?identifier="
+        return (
+            f"• <{base_entity_url}{entity.get('identifier')}|{entity.get('name')}>"
+            f" - `[{len(entity.get('passed_rules'))}/{entity.get('number_of_rules')}] Passed`"
+        )
