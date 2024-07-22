@@ -10,7 +10,6 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
     # Slack has a limit of 3001 characters per message block
     # We will use this constant to split the message blocks into smaller ones
     SLACK_MAX_MESSAGE_BLOCK_SIZE = 3000
-    SCORECARD_ENTITIES_BATCH_SIZE = 20
 
     def scorecard_report(self, blueprint: str, scorecard: Dict[str, Any], entities: list):
         blueprint_plural = utils.convert_to_plural(blueprint).title()
