@@ -11,20 +11,35 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
     # We will use this constant to split the message blocks into smaller ones
     SLACK_MAX_MESSAGE_BLOCK_SIZE = 3000
 
+    NO_LEVELS_IN_SCORECARD_MESSAGE = lambda title: [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "There are no levels in {} scorecard :disappointed:".format(title)
+            }
+        }
+    ]
+
     def scorecard_report(self, blueprint: str, scorecard: Dict[str, Any], entities: list):
         blueprint_plural = utils.convert_to_plural(blueprint).title()
-        entities_by_level = {
-            "Gold": [],
-            "Silver": [],
-            "Bronze": [],
-            "Basic": [],
-        }
+        most_advanced_level: str = self._get_most_advanced_scorecard_level(
+            scorecard
+        )
+        if not most_advanced_level:
+            return self.NO_LEVELS_IN_SCORECARD_MESSAGE(scorecard.get("title"))
+        entities_by_level = {}
         overall_entities_per_team = {}
-        gold_entities_per_team = {}
+        most_advanced_entities_per_team = {}
         number_of_passed_entities_per_rule = {}
         for entity in entities:
-            entity_scorecard_result = entity.get("scorecards", {}).get(scorecard.get("identifier"), {})
-            entities_by_level[entity_scorecard_result.get("level")].append(
+            entity_scorecard_result = entity.get(
+                "scorecards", {}
+            ).get(scorecard.get("identifier"), {})
+            entities_by_level.setdefault(
+                entity_scorecard_result.get("level"),
+                []
+            ).append(
                 {
                     "identifier": entity.get("identifier"),
                     "name": entity.get("title"),
@@ -32,8 +47,8 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
             )
             for team in entity.get("team", []):
                 overall_entities_per_team[team] = overall_entities_per_team.get(team, 0) + 1
-                if entity_scorecard_result.get("level") == "Gold":
-                    gold_entities_per_team[team] = gold_entities_per_team.get(team, 0) + 1
+                if entity_scorecard_result.get("level") == most_advanced_level:
+                    most_advanced_entities_per_team[team] = most_advanced_entities_per_team.get(team, 0) + 1
 
             for rule in entity_scorecard_result.get("rules", []):
                 number_of_passed_entities_per_rule[rule.get("identifier")] = \
@@ -181,24 +196,31 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         ]
         return blocks
 
-    def scorecard_reminder(self,
-                           blueprint: str,
-                           scorecard: Dict[str, Any],
-                           entities: list) -> List[Dict[str, Any]]:
+    def scorecard_reminder(
+        self,
+        blueprint: str,
+        scorecard: Dict[str, Any],
+        entities: list
+    ) -> List[Dict[str, Any]]:
         blueprint_plural = utils.convert_to_plural(blueprint).title()
-        entities_didnt_pass_all_rules = {
-            "Silver": [],
-            "Bronze": [],
-            "Basic": [],
-        }
+        most_advanced_level: str = self._get_most_advanced_scorecard_level(
+            scorecard
+        )
+        if not most_advanced_level:
+            return self.NO_LEVELS_IN_SCORECARD_MESSAGE(scorecard.get("title"))
+
+        entities_didnt_pass_all_rules = {}
         number_of_entities_didnt_pass_all_rules = 0
         for entity in entities:
             entity_scorecard_result = entity.get("scorecards", {}).get(scorecard.get("identifier"), {})
             number_of_rules = len(entity_scorecard_result.get("rules", []))
-            if entity_scorecard_result.get("level") != "Gold":
+            if entity_scorecard_result.get("level") != most_advanced_level:
                 passed_rules = [rule for rule in entity_scorecard_result.get("rules", []) if rule.get("status") == "SUCCESS"] or []
                 if len(passed_rules) < number_of_rules:
-                    entities_didnt_pass_all_rules[entity_scorecard_result.get("level")].append(
+                    entities_didnt_pass_all_rules.setdefault(
+                        entity_scorecard_result.get("level"),
+                        []
+                    ).append(
                         {
                             "identifier": entity.get("identifier"),
                             "name": entity.get("title"),
@@ -242,6 +264,19 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
                 )
             ]
         return blocks
+    
+    @staticmethod
+    def _get_most_advanced_scorecard_level(scorecard: dict[str, Any]) -> str | None:
+        """
+        Get the most advanced level of a scorecard
+        """
+
+        scorecard_levels = scorecard.get("levels", [])
+        if not scorecard_levels:
+            return None
+        
+        most_advanced_level: str = scorecard_levels[-1]["title"]
+        return most_advanced_level
 
     @staticmethod
     def _resolve_top_highest_lowest_scored_rules(entities: list,
