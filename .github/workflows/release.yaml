@@ -9,7 +9,7 @@ on:
 
 
 jobs:
-  build:
+  release-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,18 +25,18 @@ jobs:
         registry: ghcr.io
         username: ${{ secrets.DOCKER_MACHINE_USER }}
         password: ${{ secrets.DOCKER_MACHINE_TOKEN }}
-    - name: Build and push
-      uses: docker/build-push-action@v6
-      if: !startsWith(github.ref_name, 'v')
 
+    - name: Build and push
+      if: "!startsWith(github.ref_name, 'v')"
+      uses: docker/build-push-action@v6
       with:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ghcr.io/port-labs/port-sender:${{ github.ref_name }}
 
     - name: Build and push with latest tag
+      if: "startsWith(github.ref_name, 'v')"
       uses: docker/build-push-action@v6
-      if: startsWith(github.ref_name, 'v')
       with:
         push: true
         platforms: linux/amd64,linux/arm64
