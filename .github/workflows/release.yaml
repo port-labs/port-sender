@@ -25,10 +25,10 @@ jobs:
         registry: ghcr.io
         username: ${{ secrets.DOCKER_MACHINE_USER }}
         password: ${{ secrets.DOCKER_MACHINE_TOKEN }}
-
     - name: Build and push
       uses: docker/build-push-action@v6
       if: !startsWith(github.ref_name, 'v')
+
       with:
         push: true
         platforms: linux/amd64,linux/arm64
