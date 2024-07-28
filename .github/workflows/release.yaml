@@ -28,15 +28,16 @@ jobs:
 
     - name: Build and push
       uses: docker/build-push-action@v6
+      if: !startsWith(github.ref_name, 'v')
       with:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ghcr.io/port-labs/port-sender:${{ github.ref_name }}
 
-    - name: Push latest tag
+    - name: Build and push with latest tag
       uses: docker/build-push-action@v6
-      if: startsWith(github.ref, 'refs/tags/v')
+      if: startsWith(github.ref_name, 'v')
       with:
         push: true
         platforms: linux/amd64,linux/arm64
-        tags: ghcr.io/port-labs/port-sender:latest
+        tags: ghcr.io/port-labs/port-sender:${{ github.ref_name }},ghcr.io/port-labs/port-sender:latest
