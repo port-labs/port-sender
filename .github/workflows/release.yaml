@@ -32,3 +32,11 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ghcr.io/port-labs/port-sender:${{ github.ref_name }}
+
+    - name: Push latest tag
+      uses: docker/build-push-action@v6
+      if: startsWith(github.ref, 'refs/tags/v')
+      with:
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: ghcr.io/port-labs/port-sender:latest
