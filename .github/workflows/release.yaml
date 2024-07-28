@@ -37,6 +37,6 @@ jobs:
       uses: docker/build-push-action@v6
       if: startsWith(github.ref, 'refs/tags/v')
       with:
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/port-labs/port-sender:latest
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: ghcr.io/port-labs/port-sender:latest
