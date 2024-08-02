@@ -275,7 +275,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         if not scorecard_levels:
             return None
         
-        most_advanced_level: str = scorecard_levels[-1]["title"]
+        most_advanced_level: str = scorecard_levels[-1].get("title")
         return most_advanced_level
 
     @staticmethod
