@@ -11,23 +11,11 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
     # We will use this constant to split the message blocks into smaller ones
     SLACK_MAX_MESSAGE_BLOCK_SIZE = 3000
 
-    NO_LEVELS_IN_SCORECARD_MESSAGE = lambda title: [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": "There are no levels in {} scorecard :disappointed:".format(title)
-            }
-        }
-    ]
-
     def scorecard_report(self, blueprint: str, scorecard: Dict[str, Any], entities: list):
         blueprint_plural = utils.convert_to_plural(blueprint).title()
         most_advanced_level: str = self._get_most_advanced_scorecard_level(
             scorecard
         )
-        if not most_advanced_level:
-            return self.NO_LEVELS_IN_SCORECARD_MESSAGE(scorecard.get("title"))
         entities_by_level = {}
         overall_entities_per_team = {}
         most_advanced_entities_per_team = {}
@@ -206,8 +194,6 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         most_advanced_level: str = self._get_most_advanced_scorecard_level(
             scorecard
         )
-        if not most_advanced_level:
-            return self.NO_LEVELS_IN_SCORECARD_MESSAGE(scorecard.get("title"))
 
         entities_didnt_pass_all_rules = {}
         number_of_entities_didnt_pass_all_rules = 0
@@ -271,9 +257,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
         Get the most advanced level of a scorecard
         """
 
-        scorecard_levels = scorecard.get("levels", [])
-        if not scorecard_levels:
-            return None
+        scorecard_levels = scorecard.get("levels")
         
         most_advanced_level: str = scorecard_levels[-1]["title"]
         return most_advanced_level
