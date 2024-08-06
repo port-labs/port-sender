@@ -259,7 +259,7 @@ class SlackMessageGenerator(generators.base.BaseMessageGenerator):
 
         scorecard_levels = scorecard.get("levels")
         
-        most_advanced_level: str = scorecard_levels[-1]["title"]
+        most_advanced_level: str = scorecard_levels[-1].get("title")
         return most_advanced_level
 
     @staticmethod
