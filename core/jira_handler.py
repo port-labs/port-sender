@@ -20,11 +20,11 @@ class JiraHandler(BaseHandler):
             entity_scorecard = entity.get("scorecards", {}).get(
                 self.scorecard.get("identifier"), {}
             )
-            rules_by_level = {"Gold": [], "Silver": [], "Bronze": []}
+            rules_by_level = {}
 
             # Grouping rules by levels
             for rule in entity_scorecard.get("rules", []):
-                rules_by_level[rule.get("level")].append(rule)
+                rules_by_level.setdefault(rule.get("level"), []).append(rule)
 
             for level in rules_by_level:
                 scorecard_level_completed = all(
