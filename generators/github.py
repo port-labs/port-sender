@@ -22,7 +22,7 @@ class GithubIssueGenerator(generators.base.BaseIssueGenerator):
             f"\n> :bulb: **Tip:** Scorecards are a way for you and your team to define and track standards, metrics, and KPIs in different categories such as production readiness, quality, productivity, and more. For more information about your scorecards, go to [Port]({get_port_url(settings.port_region)})"
             "\n# Sub-Tasks"
             "\n" + "\n".join(tasks) + "\n",
-            "labels": ["Port", scorecard_title, level, blueprint, entity["identifier"]],
+            "labels": ["Port", scorecard.get("identifier",""), level, blueprint, entity["identifier"]],
         }
 
     def generate_task(self, rule: dict[str, Any]):
