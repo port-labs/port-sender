@@ -49,7 +49,7 @@ Action to send a scorecard report to a Slack channel about the current state and
 | `blueprint`          | Blueprint identifier                                                                                     | true     |         |
 | `scorecard`          | Scorecard identifier                                                                                     | true     |         |
 | `operation_kind`     | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                | true     |         |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
+| `filter_rule`        | The [rule filter](https://docs.port.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 This action will send a scorecard report to a Slack channel about the current state and progress in a scorecard.
 
@@ -100,7 +100,7 @@ A call to action to remind the team that some of their services didn't reach Gol
 | `blueprint`          | Blueprint identifier                                                                                      | true     |         |
 | `scorecard`          | Scorecard identifier                                                                                      | true     |         |
 | `operation_kind`     | Opetation kind to perform, to send Scorecard Reminder, pass - `scorecard_reminder`                        | true     |         |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
+| `filter_rule`        | The [rule filter](https://docs.port.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
 
 This example will send a scheduled reminder to a Slack channel about all the services that didn't reach the Gold level in the `productionReadiness` scorecard for the Backend Team.
 
@@ -160,7 +160,7 @@ Generated subtasks for the task:
 | `blueprint`                  | Blueprint identifier                                                                                                                                                                                     | true     |         |
 | `scorecard`                  | Scorecard identifier                                                                                                                                                                                     | true     |         |
 | `opeation_kind`              | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder`                                                                                                                            | true     |         |
-| `filter_rule`                | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
+| `filter_rule`                | The [rule filter](https://docs.port.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
 | `jira_project_id`            | The [project id](https://confluence.atlassian.com/jirakb/how-to-get-project-id-from-the-jira-user-interface-827341414.html) in Jira for tasks updating                                                   | true     |         |
 | `jira_api_endpoint`          | The URL of your Jira organization                                                                                                                                                                        | true     |         |
 | `jira_token`                 | The [Jira API token ](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/)for using Jira's REST API.                                                      | true     |         |
@@ -199,7 +199,7 @@ jobs:
                 scorecard: productionReadiness
                 filter_rule: '{"property": "$team","operator": "containsAny","value": ["Backend Team"]}'
                 jira_api_endpoint: https://example.atlassian.net
-                jira_email: matar@getport.io
+                jira_email: matar@port.io
                 jira_project_id: EXAMPLE
                 jira_token: ${{ secrets.JIRA_TOKEN }}
 
@@ -234,7 +234,7 @@ Generated Scorecard issue for the bronze level:
 | `scorecard`                  | Scorecard identifier                                                                                                                                                                                     | true     |         |
 | `opeation_kind`              | What operation should the sender do, leave at - `issue_handler`                                                                                                                            | true     |         |
 | `target_kind`                | leave at - `github`                                                                                                                            | true     |         |
-| `filter_rule`                | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
+| `filter_rule`                | The [rule filter](https://docs.port.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
 | `github_api_url`          | Github API URL. We recommend setting this to Github's `github.api_url` [context variable](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)   URL. Using GitHub Cloud, you should use - `https://api.github.com`                                                                                                                                                                                        | true     |         |
 | `github_repository`            | The Github Repository. We recommend setting this to Github's `github.repository` [context variable](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values).  If set manually, should be in the format `org_name/repo_name`, for example `port-labs/port-sender`                                                  | true     |         |
 | `github_token`          | The Github's Token used for create/get/update operations on issues. We recommend setting this to Github's `github.token` [context variable](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values), and granting it default `issues: write` [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)                                                                                                                                                                           | true     |         |
