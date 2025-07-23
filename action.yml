@@ -1,5 +1,5 @@
 name: Port Sender
-description: Manage Scorecards using 3rd party apps
+description: Send automated Port scorecard reports and reminders to Slack and sync with Jira or GitHub issues
 author: port-labs
 branding:
   icon: alert-circle
@@ -30,7 +30,7 @@ inputs:
     description: 'filter to use to filter the response, for example: {"property": "$team","operator": "containsAny","value": ["Backend"]}'
     required: false
   target_kind:
-    description: 'The target platform to integrate with. Can be either "slack" or "jira". Default is "slack'
+    description: 'The target platform to integrate with. Can be either "slack" or "jira". Default is "slack"'
     required: false
   jira_api_endpoint:
     description: 'The URL of your Jira organization. Required when using "target_kind" jira'
