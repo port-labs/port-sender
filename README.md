@@ -4,11 +4,11 @@
   <img align="right" height="54" src="https://port-graphical-assets.s3.eu-west-1.amazonaws.com/Logo+Typo+%2B+Logo+Symbol.svg">
 </picture>
 
-# Port Initiatives Sender GitHub Action
+# Port Scorecard Sender GitHub Action
 
 [![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/port-community/shared_invite/zt-1x1iys4cn-oihCQp_ropEdIUIcKESImA)
 
-Port is an open internal developer portal. The portal contains valuable data about standards and compliance (in the form of scorecards or initiatives) about software catalog entities, such as the production readiness (scorecard) of a microservice (an entity).
+Port is the platform for building your AI software factory. Port holds data about standards and compliance (as scorecards or initiatives) for your catalog entities, such as the production readiness of a microservice.
 
 This action will allow you to automatically send reports and reminders with regard to initiatives or scorecards, letting managers and developers know what standards need to be met that are relevant to them.
 
@@ -49,7 +49,7 @@ Action to send a scorecard report to a Slack channel about the current state and
 | `blueprint`          | Blueprint identifier                                                                                     | true     |         |
 | `scorecard`          | Scorecard identifier                                                                                     | true     |         |
 | `operation_kind`     | Message kind to send, to send Scorecard Report, pass - `scorecard_report`                                | true     |         |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
+| `filter_rule`        | The [rule filter](https://docs.port.io/context-lake/consuming-the-lake/search-and-query/structure-and-syntax/#rules) to apply on the data queried from Port | false    |         |
 
 This action will send a scorecard report to a Slack channel about the current state and progress in a scorecard.
 
@@ -100,7 +100,7 @@ A call to action to remind the team that some of their services didn't reach Gol
 | `blueprint`          | Blueprint identifier                                                                                      | true     |         |
 | `scorecard`          | Scorecard identifier                                                                                      | true     |         |
 | `operation_kind`     | Opetation kind to perform, to send Scorecard Reminder, pass - `scorecard_reminder`                        | true     |         |
-| `filter_rule`        | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port | false    |         |
+| `filter_rule`        | The [rule filter](https://docs.port.io/context-lake/consuming-the-lake/search-and-query/structure-and-syntax/#rules) to apply on the data queried from Port | false    |         |
 
 This example will send a scheduled reminder to a Slack channel about all the services that didn't reach the Gold level in the `productionReadiness` scorecard for the Backend Team.
 
@@ -160,7 +160,7 @@ Generated subtasks for the task:
 | `blueprint`                  | Blueprint identifier                                                                                                                                                                                     | true     |         |
 | `scorecard`                  | Scorecard identifier                                                                                                                                                                                     | true     |         |
 | `opeation_kind`              | Message kind to send, to send Scorecard Reminder, pass - `scorecard_reminder`                                                                                                                            | true     |         |
-| `filter_rule`                | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
+| `filter_rule`                | The [rule filter](https://docs.port.io/context-lake/consuming-the-lake/search-and-query/structure-and-syntax/#rules) to apply on the data queried from Port                                                                                                | false    |         |
 | `jira_project_id`            | The [project id](https://confluence.atlassian.com/jirakb/how-to-get-project-id-from-the-jira-user-interface-827341414.html) in Jira for tasks updating                                                   | true     |         |
 | `jira_api_endpoint`          | The URL of your Jira organization                                                                                                                                                                        | true     |         |
 | `jira_token`                 | The [Jira API token ](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/)for using Jira's REST API.                                                      | true     |         |
@@ -234,7 +234,7 @@ Generated Scorecard issue for the bronze level:
 | `scorecard`                  | Scorecard identifier                                                                                                                                                                                     | true     |         |
 | `opeation_kind`              | What operation should the sender do, leave at - `issue_handler`                                                                                                                            | true     |         |
 | `target_kind`                | leave at - `github`                                                                                                                            | true     |         |
-| `filter_rule`                | The [rule filter](https://docs.getport.io/search-and-query/#rules) to apply on the data queried from Port                                                                                                | false    |         |
+| `filter_rule`                | The [rule filter](https://docs.port.io/context-lake/consuming-the-lake/search-and-query/structure-and-syntax/#rules) to apply on the data queried from Port                                                                                                | false    |         |
 | `github_api_url`          | Github API URL. We recommend setting this to Github's `github.api_url` [context variable](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values)   URL. Using GitHub Cloud, you should use - `https://api.github.com`                                                                                                                                                                                        | true     |         |
 | `github_repository`            | The Github Repository. We recommend setting this to Github's `github.repository` [context variable](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values).  If set manually, should be in the format `org_name/repo_name`, for example `port-labs/port-sender`                                                  | true     |         |
 | `github_token`          | The Github's Token used for create/get/update operations on issues. We recommend setting this to Github's `github.token` [context variable](https://docs.github.com/en/actions/learn-github-actions/variables#using-contexts-to-access-variable-values), and granting it default `issues: write` [permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)                                                                                                                                                                           | true     |         |

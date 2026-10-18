@@ -18,7 +18,7 @@ class GithubIssueGenerator(generators.base.BaseIssueGenerator):
         return {
             "title": f"{scorecard_title} tasks to reach the {level} level for the {blueprint}: {entity.get('identifier', '')}",
             "body": f"⭐️ {scorecard_title} tasks for the {blueprint}: {entity_title} \n"
-            f"This issue contains all sub-tasks needed to be completed for [{entity_title}](https://app.getport.io/appEntity?identifier={entity.get('identifier')}) to reach the {level} level in the {scorecard_title} scorecard.\n"
+            f"This issue contains all sub-tasks needed to be completed for [{entity_title}](https://app.port.io/appEntity?identifier={entity.get('identifier')}) to reach the {level} level in the {scorecard_title} scorecard.\n"
             f"\n> :bulb: **Tip:** Scorecards are a way for you and your team to define and track standards, metrics, and KPIs in different categories such as production readiness, quality, productivity, and more. For more information about your scorecards, go to [Port]({get_port_url(settings.port_region)})"
             "\n# Sub-Tasks"
             "\n" + "\n".join(tasks) + "\n",

@@ -49,7 +49,7 @@ class JiraIssueGenerator(generators.base.BaseTicketGenerator):
                                                     {
                                                         "type": "link",
                                                         "attrs": {
-                                                            "href": f'https://app.getport.io/appEntity?identifier={entity.get("identifier")}'
+                                                            "href": f'https://app.port.io/appEntity?identifier={entity.get("identifier")}'
                                                         }
                                                     }
                                                 ]
@@ -115,7 +115,7 @@ class JiraIssueGenerator(generators.base.BaseTicketGenerator):
                                                             {
                                                                 "type": "link",
                                                                 "attrs": {
-                                                                    "href": "http://app.getport.io"
+                                                                    "href": "http://app.port.io"
                                                                 }
                                                             }
                                                         ]
@@ -169,7 +169,7 @@ class JiraIssueGenerator(generators.base.BaseTicketGenerator):
                                         {
                                             "type": "link",
                                             "attrs": {
-                                                "href": f'https://app.getport.io/appEntity?'
+                                                "href": f'https://app.port.io/appEntity?'
                                                         f'identifier={entity.get("identifier")}'
                                             }
                                         }
@@ -243,7 +243,7 @@ class JiraIssueGenerator(generators.base.BaseTicketGenerator):
                                                 {
                                                     "type": "link",
                                                     "attrs": {
-                                                        "href": "http://app.getport.io"
+                                                        "href": "http://app.port.io"
                                                     }
                                                 }
                                             ]
