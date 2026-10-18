@@ -4,7 +4,7 @@
   <img align="right" height="54" src="https://port-graphical-assets.s3.eu-west-1.amazonaws.com/Logo+Typo+%2B+Logo+Symbol.svg">
 </picture>
 
-# Port Scorecard Sender GitHub Action
+# Port Initiatives Sender GitHub Action
 
 [![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/port-community/shared_invite/zt-1x1iys4cn-oihCQp_ropEdIUIcKESImA)
 
